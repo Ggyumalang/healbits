@@ -1,5 +1,6 @@
 package com.zerobase.healbits.dto;
 
+import com.zerobase.healbits.validator.PhoneNumCheck;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
@@ -21,6 +22,7 @@ public class RegisterMember {
         private String name;
 
         @NotBlank
+        @PhoneNumCheck
         private String phone;
 
         @NotNull

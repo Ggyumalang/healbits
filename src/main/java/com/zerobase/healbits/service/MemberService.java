@@ -6,11 +6,11 @@ import com.zerobase.healbits.dto.RegisterMember;
 import com.zerobase.healbits.exception.HealBitsException;
 import com.zerobase.healbits.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotBlank;
-import java.util.Optional;
 
 import static com.zerobase.healbits.type.ErrorCode.EMAIL_ALREADY_EXIST;
 
@@ -19,6 +19,8 @@ import static com.zerobase.healbits.type.ErrorCode.EMAIL_ALREADY_EXIST;
 public class MemberService {
     private final MemberRepository memberRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
     @Transactional
     public MemberDto registerMember(RegisterMember.Request request) {
 
@@ -26,18 +28,16 @@ public class MemberService {
 
         return MemberDto.fromEntity(memberRepository.save(Member.builder()
                 .email(request.getEmail())
-                .password(request.getPassword())
+                .password(passwordEncoder.encode(request.getPassword()))
                 .name(request.getName())
                 .phone(request.getPhone())
-                .balance(request.getBalance())
                 .build()));
     }
 
 
     private void checkExistedEmail(@NotBlank String email) {
-        Optional<Member> optionalMember = memberRepository.findByEmail(email);
-        if (optionalMember.isPresent()) {
+        memberRepository.findByEmail(email).ifPresent(it -> {
             throw new HealBitsException(EMAIL_ALREADY_EXIST);
-        }
+        });
     }
 }
