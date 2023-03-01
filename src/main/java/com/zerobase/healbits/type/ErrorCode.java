@@ -6,6 +6,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ErrorCode {
+    WRONG_PHONE_FORMAT("잘못된 휴대폰 번호입니다."),
     EMAIL_NOT_FOUND("등록되지 않은 이메일입니다."),
     INTERNAL_SERVER_ERROR("내부 서버 문제입니다."),
     EMAIL_ALREADY_EXIST("이미 존재하는 이메일입니다."),

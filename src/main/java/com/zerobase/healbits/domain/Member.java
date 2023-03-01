@@ -10,7 +10,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Builder
 @Entity
-public class Member extends BaseEntity{
+public class Member extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -21,7 +21,9 @@ public class Member extends BaseEntity{
     private String password;
 
     private String name;
+
     private String phone;
+
     private long balance;
 
 }
