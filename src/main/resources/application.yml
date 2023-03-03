@@ -17,6 +17,7 @@ spring:
 
 jwt:
   secret: VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa
-
+  access-token-expire-time: 86400000
+  refresh-token-expire-time : 86400000
 
 
