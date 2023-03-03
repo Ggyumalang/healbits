@@ -4,14 +4,13 @@ import com.zerobase.healbits.validator.PhoneNumCheck;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 public class RegisterMember {
 
     @Getter
     @Setter
     @AllArgsConstructor
-    public static class Request{
+    public static class Request {
         @NotBlank
         private String email;
 
@@ -24,9 +23,6 @@ public class RegisterMember {
         @NotBlank
         @PhoneNumCheck
         private String phone;
-
-        @NotNull
-        private long balance;
     }
 
     @Getter
@@ -34,11 +30,11 @@ public class RegisterMember {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class Response{
+    public static class Response {
         private String email;
         private String name;
 
-        public static Response from(MemberDto memberDto){
+        public static Response from(MemberDto memberDto) {
             return Response.builder()
                     .email(memberDto.getEmail())
                     .name(memberDto.getName())
@@ -46,8 +42,6 @@ public class RegisterMember {
         }
 
     }
-
-
 
 
 }
