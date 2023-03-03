@@ -12,7 +12,7 @@
 
 ## **프로젝트 구조**
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/f381f0d4-a3a5-425f-889e-939fba3864ff/Untitled.png)
+<img src = "images/Project_Architecture.png"/>
 
 ## ERD
 
@@ -26,7 +26,7 @@ Challenge : TakeChallenge ( 1 : N )
 
 TakeChallenge : Verification( 1 : N )
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/365e8e1b-020e-4133-9013-99a60cc89df5/Untitled.png)
+<img src = "images/ERD.png"/>
 
 ## 프로젝트 기능
 
