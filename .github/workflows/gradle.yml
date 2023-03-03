@@ -31,7 +31,7 @@ jobs:
     - name: Setup MySQL
       uses: healbits/mysql-action@v3
       with:
-        host port: 43306
+        host port: 3306
         character set server: 'utf8' 
         mysql database: 'healbits' 
         mysql user: 'healbits_user'
