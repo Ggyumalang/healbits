@@ -1,6 +1,7 @@
 package com.zerobase.healbits.controller;
 
 import com.zerobase.healbits.dto.LoginMember;
+import com.zerobase.healbits.dto.MemberInfo;
 import com.zerobase.healbits.dto.RegisterMember;
 import com.zerobase.healbits.dto.TokenInfo;
 import com.zerobase.healbits.service.MemberService;
@@ -36,9 +37,9 @@ public class MemberController {
     }
 
     @GetMapping("/member/info")
-    public String getMemberInfo(
+    public MemberInfo getMemberInfo(
             @RequestParam("email") String email
-    ) {
-        return "test";
+    ){
+        return memberService.getMemberInfo(email);
     }
 }

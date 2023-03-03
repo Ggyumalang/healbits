@@ -2,6 +2,7 @@ package com.zerobase.healbits.service;
 
 import com.zerobase.healbits.domain.Member;
 import com.zerobase.healbits.dto.MemberDto;
+import com.zerobase.healbits.dto.MemberInfo;
 import com.zerobase.healbits.dto.RegisterMember;
 import com.zerobase.healbits.dto.TokenInfo;
 import com.zerobase.healbits.exception.HealBitsException;
@@ -61,11 +62,15 @@ public class MemberService implements UserDetailsService {
     public TokenInfo login(String email, String password) {
         // 1. Login ID/PW 를 기반으로 Authentication 객체 생성
         // 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 false
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(email, password);
 
         // 2. 실제 검증 (사용자 비밀번호 체크)이 이루어지는 부분
         // authenticate 매서드가 실행될 때 loadUserByUsername 메서드가 실행
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+
+        Authentication authentication = authenticationManagerBuilder
+                .getObject()
+                .authenticate(authenticationToken);
 
         // 3. 인증 정보를 기반으로 JWT 토큰 생성하고 리턴
         return jwtTokenProvider.generateToken(authentication);
@@ -83,4 +88,11 @@ public class MemberService implements UserDetailsService {
                 , member.getPassword()
                 , grantedAuthorities);
     }
+
+    public MemberInfo getMemberInfo(String email) {
+
+        return MemberInfo.from(memberRepository.findByEmail(email)
+                .orElseThrow(() -> new HealBitsException(EMAIL_NOT_FOUND)));
+    }
+
 }
