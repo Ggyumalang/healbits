@@ -1,10 +1,7 @@
 package com.zerobase.healbits.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zerobase.healbits.dto.LoginMember;
-import com.zerobase.healbits.dto.MemberDto;
-import com.zerobase.healbits.dto.RegisterMember;
-import com.zerobase.healbits.dto.TokenInfo;
+import com.zerobase.healbits.dto.*;
 import com.zerobase.healbits.service.MemberService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -111,6 +108,28 @@ class MemberControllerTest {
                         .with(user("jake").roles("USER")))
                 .andDo(print())
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser
+    void success_getMemberInfo() throws Exception {
+        //given 어떤 데이터가 주어졌을 때
+        given(memberService.getMemberInfo(anyString()))
+                .willReturn(MemberInfo.builder()
+                        .email("khg1111@hanmail.net")
+                        .name("홍길동")
+                        .phone("01011112222")
+                        .balance(1000)
+                        .build());
+        //when 어떤 경우에
+        //then 이런 결과가 나온다.
+        mockMvc.perform(get("/member/info?email=jake@naver.com"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.email").value("khg1111@hanmail.net"))
+                .andExpect(jsonPath("$.name").value("홍길동"))
+                .andExpect(jsonPath("$.phone").value("01011112222"))
+                .andExpect(jsonPath("$.balance").value(1000));
     }
 
 }

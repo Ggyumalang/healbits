@@ -90,7 +90,6 @@ public class MemberService implements UserDetailsService {
     }
 
     public MemberInfo getMemberInfo(String email) {
-
         return MemberInfo.from(memberRepository.findByEmail(email)
                 .orElseThrow(() -> new HealBitsException(EMAIL_NOT_FOUND)));
     }

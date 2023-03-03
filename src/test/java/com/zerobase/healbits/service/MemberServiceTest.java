@@ -2,6 +2,7 @@ package com.zerobase.healbits.service;
 
 import com.zerobase.healbits.domain.Member;
 import com.zerobase.healbits.dto.MemberDto;
+import com.zerobase.healbits.dto.MemberInfo;
 import com.zerobase.healbits.dto.RegisterMember;
 import com.zerobase.healbits.exception.HealBitsException;
 import com.zerobase.healbits.repository.MemberRepository;
@@ -64,6 +65,8 @@ class MemberServiceTest {
         verify(memberRepository, times(1)).save(argumentCaptor.capture());
         assertEquals("01022223333", argumentCaptor.getValue().getPhone());
         assertEquals("01011112222", memberDto.getPhone());
+        assertEquals("khg1111@naver.com", memberDto.getEmail());
+        assertEquals("홍길", memberDto.getName());
     }
 
     @Test
@@ -115,6 +118,39 @@ class MemberServiceTest {
                 .willReturn(Optional.empty());
         //when 어떤 경우에
         HealBitsException healBitsException = assertThrows(HealBitsException.class, () -> memberService.loadUserByUsername("khg1111@hanmail.net"));
+        //then 이런 결과가 나온다.
+        assertEquals(EMAIL_NOT_FOUND, healBitsException.getErrorCode());
+    }
+
+    @Test
+    void success_getMemberInfo() {
+        //given 어떤 데이터가 주어졌을 때
+        given(memberRepository.findByEmail(anyString()))
+                .willReturn(Optional.ofNullable(Member.builder()
+                        .email("khg1111@naver.com")
+                        .password("1234")
+                        .name("홍길")
+                        .phone("01011112222")
+                        .balance(10000)
+                        .build()));
+        //when 어떤 경우에
+        MemberInfo memberInfo = memberService.getMemberInfo("khg2154@hanmail.net");
+        //then 이런 결과가 나온다.
+        assertEquals("khg1111@naver.com", memberInfo.getEmail());
+        assertEquals("홍길", memberInfo.getName());
+        assertEquals("01011112222", memberInfo.getPhone());
+        assertEquals(10000, memberInfo.getBalance());
+
+    }
+
+    @Test
+    @DisplayName("EMAIL_NOT_FOUND_getMemberInfo")
+    void fail_getMemberInfo() {
+        //given 어떤 데이터가 주어졌을 때
+        given(memberRepository.findByEmail(anyString()))
+                .willReturn(Optional.empty());
+        //when 어떤 경우에
+        HealBitsException healBitsException = assertThrows(HealBitsException.class, () -> memberService.getMemberInfo("khg1111@hanmail.net"));
         //then 이런 결과가 나온다.
         assertEquals(EMAIL_NOT_FOUND, healBitsException.getErrorCode());
     }
