@@ -31,9 +31,10 @@ jobs:
     - name: Setup MySQL
       uses: healbits/mysql-action@v3
       with:
-        host port: 43306
+        host port: 3306
         character set server: 'utf8' 
-        mysql database: 'healbits' 
+        mysql database: 'healbits'
+        mysql root password: ${{ secrets.RootPassword }}
         mysql user: 'healbits_user'
         mysql password: ${{ secrets.MYSQL_PASSWORD }} 
     - name: Grant execute permission for gradlew

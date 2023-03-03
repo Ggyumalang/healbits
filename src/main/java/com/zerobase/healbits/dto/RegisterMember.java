@@ -3,6 +3,7 @@ package com.zerobase.healbits.dto;
 import com.zerobase.healbits.validator.PhoneNumCheck;
 import lombok.*;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 public class RegisterMember {
@@ -12,6 +13,7 @@ public class RegisterMember {
     @AllArgsConstructor
     public static class Request {
         @NotBlank
+        @Email
         private String email;
 
         @NotBlank

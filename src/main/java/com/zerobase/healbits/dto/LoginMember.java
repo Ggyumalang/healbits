@@ -2,6 +2,7 @@ package com.zerobase.healbits.dto;
 
 import lombok.*;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 @Getter
@@ -11,6 +12,7 @@ import javax.validation.constraints.NotBlank;
 @Builder
 public class LoginMember {
     @NotBlank
+    @Email
     private String email;
 
     @NotBlank
