@@ -6,6 +6,8 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ErrorCode {
+    WRONG_DATE_FORMAT("잘못된 날짜 형식입니다."),
+    CHALLENGE_CATEGORY_NOT_FOUND("등록되지 않은 챌린지 카테고리입니다."),
     WRONG_PASSWORD_ERROR("비밀번호가 틀렸습니다."),
     WRONG_PHONE_FORMAT("잘못된 휴대폰 번호입니다."),
     EMAIL_NOT_FOUND("등록되지 않은 이메일입니다."),

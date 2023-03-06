@@ -4,6 +4,7 @@ import com.zerobase.healbits.dto.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.validation.FieldError;
@@ -27,6 +28,15 @@ public class GlobalExceptionHandler {
         return ErrorResponse.builder()
                 .errorCode(he.getErrorCode())
                 .errorMessage(he.getErrorMessage())
+                .build();
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ErrorResponse handleHttpMessageNotReadableException(HttpMessageNotReadableException re) {
+        log.error("WRONG_DATE_FORMAT", re);
+        return ErrorResponse.builder()
+                .errorCode(WRONG_DATE_FORMAT)
+                .errorMessage(WRONG_DATE_FORMAT.getErrorMessage())
                 .build();
     }
 

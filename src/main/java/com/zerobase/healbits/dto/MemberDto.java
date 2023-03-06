@@ -15,7 +15,7 @@ public class MemberDto {
     private String phone;
     private long balance;
 
-    public static MemberDto fromEntity(Member member){
+    public static MemberDto fromEntity(Member member) {
         return MemberDto.builder()
                 .email(member.getEmail())
                 .name(member.getName())
