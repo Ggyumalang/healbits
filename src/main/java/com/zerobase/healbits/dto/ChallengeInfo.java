@@ -11,9 +11,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ChallengeDto {
+public class ChallengeInfo {
 
-    private String email;
     private String challengeName;
     private ChallengeCategory challengeCategory;
     private String summary;
@@ -22,9 +21,8 @@ public class ChallengeDto {
     private LocalDate startDate;
     private LocalDate endDate;
 
-    public static ChallengeDto fromEntity(Challenge challenge) {
-        return ChallengeDto.builder()
-                .email(challenge.getMember().getEmail())
+    public static ChallengeInfo fromEntity(Challenge challenge) {
+        return ChallengeInfo.builder()
                 .challengeName(challenge.getChallengeName())
                 .challengeCategory(challenge.getChallengeCategory())
                 .summary(challenge.getSummary())

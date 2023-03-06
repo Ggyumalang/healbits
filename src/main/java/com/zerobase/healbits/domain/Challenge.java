@@ -20,6 +20,8 @@ public class Challenge extends BaseEntity {
     @ManyToOne
     private Member member;
 
+    private String challengeName;
+
     @Enumerated(EnumType.STRING)
     private ChallengeCategory challengeCategory;
 

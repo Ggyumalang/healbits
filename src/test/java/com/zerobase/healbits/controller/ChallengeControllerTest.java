@@ -42,6 +42,7 @@ class ChallengeControllerTest {
         given(challengeService.registerChallenge(any()))
                 .willReturn(ChallengeDto.builder()
                         .email("abc@daum.net")
+                        .challengeName("challenge")
                         .challengeCategory(ChallengeCategory.HEALTH)
                         .summary("abc")
                         .contents("abcdef")
@@ -56,6 +57,7 @@ class ChallengeControllerTest {
                         .content(objectMapper.writeValueAsString(
                                 new RegisterChallenge.Request(
                                         "abc@naver.com",
+                                        "chall",
                                         "LIFE",
                                         "요약입니다",
                                         "내용입니다",
@@ -66,6 +68,7 @@ class ChallengeControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.email").value("abc@daum.net"))
+                .andExpect(jsonPath("$.challengeName").value("challenge"))
                 .andExpect(jsonPath("$.challengeCategory").value("HEALTH"))
                 .andExpect(jsonPath("$.summary").value("abc"))
                 .andExpect(jsonPath("$.startDate").value("2023-03-06"))

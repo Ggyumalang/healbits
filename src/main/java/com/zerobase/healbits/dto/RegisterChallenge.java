@@ -21,6 +21,9 @@ public class RegisterChallenge {
         private String email;
 
         @NotBlank
+        private String challengeName;
+
+        @NotBlank
         private String challengeCategory;
 
         private String summary;
@@ -46,6 +49,8 @@ public class RegisterChallenge {
 
         private String email;
 
+        private String challengeName;
+
         private ChallengeCategory challengeCategory;
 
         private String summary;
@@ -57,6 +62,7 @@ public class RegisterChallenge {
         public static Response from(ChallengeDto challengeDto) {
             return Response.builder()
                     .email(challengeDto.getEmail())
+                    .challengeName(challengeDto.getChallengeName())
                     .challengeCategory(challengeDto.getChallengeCategory())
                     .summary(challengeDto.getSummary())
                     .startDate(challengeDto.getStartDate())

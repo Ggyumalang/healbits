@@ -56,6 +56,7 @@ class ChallengeServiceTest {
                 .willReturn(Challenge.builder()
                         .id(1L)
                         .member(member)
+                        .challengeName("challenge2")
                         .challengeCategory(ChallengeCategory.HEALTH)
                         .summary("abc")
                         .contents("abcdef")
@@ -66,6 +67,7 @@ class ChallengeServiceTest {
         //when 어떤 경우에
         ChallengeDto challengeDto = challengeService.registerChallenge(new RegisterChallenge.Request(
                 "abc@naver.com",
+                "challenge",
                 "LIFE",
                 "요약입니다",
                 "내용입니다",
@@ -74,17 +76,19 @@ class ChallengeServiceTest {
         ));
         ArgumentCaptor<Challenge> captor = ArgumentCaptor.forClass(Challenge.class);
         //then 이런 결과가 나온다.
-        verify(challengeRepository,times(1)).save(captor.capture());
+        verify(challengeRepository, times(1)).save(captor.capture());
+        assertEquals("challenge", captor.getValue().getChallengeName());
         assertEquals(ChallengeCategory.LIFE, captor.getValue().getChallengeCategory());
         assertEquals("요약입니다", captor.getValue().getSummary());
         assertEquals("내용입니다", captor.getValue().getContents());
         assertEquals(LocalDate.now(), captor.getValue().getStartDate());
         assertEquals(LocalDate.now().plusDays(14), captor.getValue().getEndDate());
-        assertEquals("khg1111@naver.com",challengeDto.getEmail());
+        assertEquals("khg1111@naver.com", challengeDto.getEmail());
+        assertEquals("challenge2", challengeDto.getChallengeName());
         assertEquals(ChallengeCategory.HEALTH, challengeDto.getChallengeCategory());
-        assertEquals("abc",challengeDto.getSummary());
-        assertEquals(LocalDate.now(),challengeDto.getStartDate());
-        assertEquals(LocalDate.now().plusDays(7),challengeDto.getEndDate());
+        assertEquals("abc", challengeDto.getSummary());
+        assertEquals(LocalDate.now(), challengeDto.getStartDate());
+        assertEquals(LocalDate.now().plusDays(7), challengeDto.getEndDate());
     }
 
     @Test
@@ -97,16 +101,17 @@ class ChallengeServiceTest {
         //when 어떤 경우에
         HealBitsException healBitsException = assertThrows(HealBitsException.class,
                 () -> challengeService.registerChallenge(new RegisterChallenge.Request(
-                "abc@naver.com",
-                "LIFE",
-                "요약입니다",
-                "내용입니다",
-                LocalDate.now(),
-                LocalDate.now().plusDays(14)
-        )));
+                        "abc@naver.com",
+                        "challenge",
+                        "LIFE",
+                        "요약입니다",
+                        "내용입니다",
+                        LocalDate.now(),
+                        LocalDate.now().plusDays(14)
+                )));
 
         //then
-        assertEquals(EMAIL_NOT_FOUND,healBitsException.getErrorCode());
+        assertEquals(EMAIL_NOT_FOUND, healBitsException.getErrorCode());
     }
 
     @Test
@@ -126,6 +131,7 @@ class ChallengeServiceTest {
         HealBitsException healBitsException = assertThrows(HealBitsException.class,
                 () -> challengeService.registerChallenge(new RegisterChallenge.Request(
                         "abc@naver.com",
+                        "challenge",
                         "LIF",
                         "요약입니다",
                         "내용입니다",
@@ -134,6 +140,6 @@ class ChallengeServiceTest {
                 )));
 
         //then
-        assertEquals(CHALLENGE_CATEGORY_NOT_FOUND,healBitsException.getErrorCode());
+        assertEquals(CHALLENGE_CATEGORY_NOT_FOUND, healBitsException.getErrorCode());
     }
 }

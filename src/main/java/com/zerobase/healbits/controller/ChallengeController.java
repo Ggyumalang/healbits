@@ -1,13 +1,13 @@
 package com.zerobase.healbits.controller;
 
+import com.zerobase.healbits.dto.ChallengeInfo;
 import com.zerobase.healbits.dto.RegisterChallenge;
 import com.zerobase.healbits.service.ChallengeService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,5 +21,12 @@ public class ChallengeController {
         return RegisterChallenge.Response.from(
                 challengeService.registerChallenge(request)
         );
+    }
+
+    @GetMapping("/challenge/list")
+    public List<ChallengeInfo> getChallengeListByCategory(
+            @RequestParam String challengeCategory
+    ) {
+        return challengeService.getChallengeListByCategory(challengeCategory);
     }
 }

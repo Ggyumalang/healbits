@@ -3,6 +3,7 @@ package com.zerobase.healbits.service;
 import com.zerobase.healbits.domain.Challenge;
 import com.zerobase.healbits.domain.Member;
 import com.zerobase.healbits.dto.ChallengeDto;
+import com.zerobase.healbits.dto.ChallengeInfo;
 import com.zerobase.healbits.dto.RegisterChallenge;
 import com.zerobase.healbits.exception.HealBitsException;
 import com.zerobase.healbits.repository.ChallengeRepository;
@@ -10,6 +11,9 @@ import com.zerobase.healbits.repository.MemberRepository;
 import com.zerobase.healbits.type.ChallengeCategory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.zerobase.healbits.type.ErrorCode.CHALLENGE_CATEGORY_NOT_FOUND;
 import static com.zerobase.healbits.type.ErrorCode.EMAIL_NOT_FOUND;
@@ -28,6 +32,15 @@ public class ChallengeService {
         );
     }
 
+    public List<ChallengeInfo> getChallengeListByCategory(String challengeCategory) {
+        List<Challenge> challengeCategoryList = challengeRepository.findAllByChallengeCategory(
+                convertStringToChallengeCategory(challengeCategory)
+        );
+        return challengeCategoryList.stream()
+                .map(ChallengeInfo::fromEntity)
+                .collect(Collectors.toList());
+    }
+
     private Member getMemberByEmail(String email) {
         return memberRepository.findByEmail(email)
                 .orElseThrow(() -> new HealBitsException(EMAIL_NOT_FOUND));
@@ -36,6 +49,7 @@ public class ChallengeService {
     private Challenge saveAndGetChallenge(RegisterChallenge.Request request, Member member) {
         return challengeRepository.save(Challenge.builder()
                 .member(member)
+                .challengeName(request.getChallengeName())
                 .challengeCategory(convertStringToChallengeCategory(request.getChallengeCategory()))
                 .summary(request.getSummary())
                 .contents(request.getContents())
