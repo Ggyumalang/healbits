@@ -15,7 +15,7 @@ public class MemberInfo {
     private String phone;
     private long balance;
 
-    public static MemberInfo from(Member member){
+    public static MemberInfo fromEntity(Member member) {
         return MemberInfo.builder()
                 .email(member.getEmail())
                 .name(member.getName())
