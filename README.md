@@ -186,6 +186,131 @@ TakeChallenge : Verification( 1 : N )
         "balance": 0
     }
     ```
+    
+## 4. 챌린지 등록 API
+
+- POST /challenge/register
+- 파라미터 : 챌린지명 , 챌린지 카테고리 , 요약설명, 설명, 시작시간, 종료시간
+- 정책 : 등록되지 않은 이메일, 카테고리 혹은 시작 및 종료 일자가 yyyy-MM-dd 형식이 아니라면 실패응답, 시작 일자가 현재 일자보다 과거일 경우 , 시작 일자가 종료 일자보다 미래일 경우 실패 응답
+- 성공 응답 : 이메일 , 챌린지명
+
+### 상세 정보
+
+- 저장이 필요한 정보
+
+| 컬럼명 | 데이터 타입 | 설명 |
+| --- | --- | --- |
+| id | pk
+(Long) | primary key |
+| registeredMember | Member | 회원테이블과 챌린지 테이블은 1:N 관계이다. |
+| challengeName | String | 챌린지명 |
+| challengeCategory | String | 챌린지 카테고리 |
+| summary | String | 챌린지에 대한 요약설명 |
+| contents | String | 챌리지에 대한 설 |
+| participantsNum | Long | 챌린지 참여자 수 |
+| startDate | LocalDate | 챌린지 시작일자 |
+| endDate | LocalDate | 챌린지 종료일자 |
+| registeredDateTime | LocalDateTime | 등록일시 |
+| updatedDatetime | LocalDateTime | 수정일시 |
+- 요청 / 응답 구조
+    - 요청
+    
+    ```java
+    {
+      "challengeName" : "challenge",
+      "challengeCategory" : "HEALTH",
+      "summary" : "운동",
+      "contents" : "주 3회 운동하기",
+      "startDate" : "2023-03-06",
+      "endDate" : "2023-03-13"
+    }
+    ```
+    
+    - 응답
+    
+    ```java
+    {
+    	"email":"abcd@gmail.com",
+    	"challengeName":"challenge",
+    }
+    ```
+    
+
+## 5. 카테고리에 따른 챌린지 목록 조회 API
+
+- GET /challenge/list?challengeCategory={challengeCategory}
+- 파라미터 : 챌린지 카테고리명
+- 정책 : 시작날짜가 현재 날짜보다 크거나 같은 챌린지 목록을 카테고리별로 조회 가능
+          등록되지 않은 카테고리 실패응답
+- 성공 응답 : 챌린지명, 챌린지 카테고리, 요약설명, 참가자 수, 챌린지 기간 , 시작 일까지 남은 일
+
+### 상세 정보
+
+- 요청 / 응답 구조
+    - 요청
+    
+    ```java
+    GET /challenge/list?challengeCategory={challengeCategory}
+    ```
+    
+    - 응답
+    
+    ```java
+    [
+        {
+            "challengeName": "취미1",
+            "challengeCategory": "HOBBY",
+            "summary": "취미:음악",
+            "participantsNum": 0,
+            "duration": 8,
+            "remainingDays": 0
+        },
+        {
+            "challengeName": "취미2",
+            "challengeCategory": "HOBBY",
+            "summary": "취미:미술",
+            "participantsNum": 0,
+            "challengeDuration": 5,
+            "remainingDaysToStart": 3
+        }
+    ]
+    ```
+    
+
+## 6. 챌린지 상세 조회 API
+
+- GET /challenge/detail?challengeId={challengeId}
+- 파라미터 : 챌린지Id
+- 정책 : 현재 일자가 챌린지 시작 일자보다 작다면 CategoryStatus = READY 
+          현재 일자가 챌린지 시작 일자 - 챌린지 종료일자라면 CategoryStatus = IN_PROGRESS 
+          챌린지 종료일자보다 더 미래라면 CategoryStatus = CLOSED 
+          해당 챌린지의 상세한 정보를 조회할 수 있는 API
+          등록되지 않은 챌린지의 경우 실패응답
+- 성공 응답 : 챌린지명, 챌린지 카테고리, 챌린지 설명, 챌린지 참여자 수 , 챌린지 상태 ,
+                  챌린지 시작일자, 챌린지 종료일자
+
+### 상세 정보
+
+- 요청 / 응답 구조
+    - 요청
+    
+    ```java
+    GET /challenge/detail?challengeId={challengeId}
+    ```
+    
+    - 응답
+    
+    ```java
+    {
+        "challengeName": "challenge",
+        "challengeCategory": "ENVIRONMENT",
+        "contents": "환경지킴이",
+        "participantsNum": 1000,
+        "challengeStatus": "ACTIVE",
+        "startDate": "2023-03-10",
+        "endDate": "2023-03-11"
+    }
+    ```
 ---
 ## 사용 기술스택
 
