@@ -33,7 +33,10 @@ public class SecurityConfiguration {
 
         httpSecurity
                 .authorizeRequests()
-                .antMatchers("/member/login", "/member/register").permitAll() //해당 API에 대해서는 모든 요청을 허가한다는 설정이다.
+                .antMatchers("/member/login",
+                        "/member/register",
+                        "/challenge/list"
+                ).permitAll() //해당 API에 대해서는 모든 요청을 허가한다는 설정이다.
                 .anyRequest().hasRole("USER"); //이 밖의 모든 요청은 USER 권한이 있어야 요청할 수 있다는 설정이다.
 
         httpSecurity

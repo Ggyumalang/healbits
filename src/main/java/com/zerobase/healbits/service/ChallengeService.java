@@ -3,7 +3,7 @@ package com.zerobase.healbits.service;
 import com.zerobase.healbits.domain.Challenge;
 import com.zerobase.healbits.domain.Member;
 import com.zerobase.healbits.dto.ChallengeDto;
-import com.zerobase.healbits.dto.ChallengeInfo;
+import com.zerobase.healbits.dto.ChallengeSummaryInfo;
 import com.zerobase.healbits.dto.RegisterChallenge;
 import com.zerobase.healbits.exception.HealBitsException;
 import com.zerobase.healbits.repository.ChallengeRepository;
@@ -32,12 +32,12 @@ public class ChallengeService {
         );
     }
 
-    public List<ChallengeInfo> getChallengeListByCategory(String challengeCategory) {
-        List<Challenge> challengeCategoryList = challengeRepository.findAllByChallengeCategory(
+    public List<ChallengeSummaryInfo> getChallengeListByCategory(String challengeCategory) {
+        List<Challenge> challengeList = challengeRepository.findAllByChallengeCategory(
                 convertStringToChallengeCategory(challengeCategory)
         );
-        return challengeCategoryList.stream()
-                .map(ChallengeInfo::fromEntity)
+        return challengeList.stream()
+                .map(ChallengeSummaryInfo::fromEntity)
                 .collect(Collectors.toList());
     }
 

@@ -4,6 +4,7 @@ public enum ChallengeCategory {
     HEALTH,
     LIFE,
     HOBBY,
-    ENVIRONMENT
+    ENVIRONMENT,
+    EATING_HABITS
 
 }

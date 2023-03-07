@@ -3,6 +3,7 @@ package com.zerobase.healbits.service;
 import com.zerobase.healbits.domain.Challenge;
 import com.zerobase.healbits.domain.Member;
 import com.zerobase.healbits.dto.ChallengeDto;
+import com.zerobase.healbits.dto.ChallengeSummaryInfo;
 import com.zerobase.healbits.dto.RegisterChallenge;
 import com.zerobase.healbits.exception.HealBitsException;
 import com.zerobase.healbits.repository.ChallengeRepository;
@@ -17,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import static com.zerobase.healbits.type.ErrorCode.CHALLENGE_CATEGORY_NOT_FOUND;
@@ -41,7 +43,7 @@ class ChallengeServiceTest {
     private ChallengeService challengeService;
 
     @Test
-    void success_RegisterChallenge() {
+    void success_registerChallenge() {
         //given 어떤 데이터가 주어졌을 때
         Member member = Member.builder()
                 .email("khg1111@naver.com")
@@ -93,7 +95,7 @@ class ChallengeServiceTest {
 
     @Test
     @DisplayName("Email_Not_Found_RegisterChallenge")
-    void Email_Not_Found_RegisterChallenge() {
+    void email_Not_Found_RegisterChallenge() {
         //given 어떤 데이터가 주어졌을 때
         given(memberRepository.findByEmail(anyString()))
                 .willReturn(Optional.empty());
@@ -138,6 +140,44 @@ class ChallengeServiceTest {
                         LocalDate.now(),
                         LocalDate.now().plusDays(14)
                 )));
+
+        //then
+        assertEquals(CHALLENGE_CATEGORY_NOT_FOUND, healBitsException.getErrorCode());
+    }
+
+    @Test
+    void success_getChallengeListByCategory() {
+        //given 어떤 데이터가 주어졌을 때
+
+        given(challengeRepository.findAllByChallengeCategory(any()))
+                .willReturn(List.of(Challenge.builder()
+                        .challengeName("challenge2")
+                        .challengeCategory(ChallengeCategory.HEALTH)
+                        .summary("abc")
+                        .participantsNum(3000)
+                        .startDate(LocalDate.now())
+                        .endDate(LocalDate.now().plusDays(7))
+                        .build()));
+        //when 어떤 경우에
+        List<ChallengeSummaryInfo> list = challengeService.getChallengeListByCategory("HEALTH");
+        //then 이런 결과가 나온다.
+        assertEquals("challenge2", list.get(0).getChallengeName());
+        assertEquals(ChallengeCategory.HEALTH, list.get(0).getChallengeCategory());
+        assertEquals("abc", list.get(0).getSummary());
+        assertEquals(3000, list.get(0).getParticipantsNum());
+        assertEquals(7, list.get(0).getDuration());
+        assertEquals(LocalDate.now(), list.get(0).getStartDate());
+        assertEquals(LocalDate.now().plusDays(7), list.get(0).getEndDate());
+    }
+
+    @Test
+    @DisplayName("CHALLENGE_CATEGORY_NOT_FOUND_GetChallengeListByCategory")
+    void challenge_Category_Not_Found_GetChallengeListByCategory() {
+        //given 어떤 데이터가 주어졌을 때
+        //when 어떤 경우에
+        HealBitsException healBitsException = assertThrows(HealBitsException.class,
+                () -> challengeService.getChallengeListByCategory("LIF")
+        );
 
         //then
         assertEquals(CHALLENGE_CATEGORY_NOT_FOUND, healBitsException.getErrorCode());

@@ -1,6 +1,6 @@
 package com.zerobase.healbits.controller;
 
-import com.zerobase.healbits.dto.ChallengeInfo;
+import com.zerobase.healbits.dto.ChallengeSummaryInfo;
 import com.zerobase.healbits.dto.RegisterChallenge;
 import com.zerobase.healbits.service.ChallengeService;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ public class ChallengeController {
     }
 
     @GetMapping("/challenge/list")
-    public List<ChallengeInfo> getChallengeListByCategory(
+    public List<ChallengeSummaryInfo> getChallengeListByCategory(
             @RequestParam String challengeCategory
     ) {
         return challengeService.getChallengeListByCategory(challengeCategory);

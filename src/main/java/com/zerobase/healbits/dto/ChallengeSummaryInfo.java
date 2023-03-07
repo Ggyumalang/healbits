@@ -5,29 +5,30 @@ import com.zerobase.healbits.type.ChallengeCategory;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.Period;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ChallengeInfo {
+public class ChallengeSummaryInfo {
 
     private String challengeName;
     private ChallengeCategory challengeCategory;
     private String summary;
-    private String contents;
     private long participantsNum;
+    private long duration;
     private LocalDate startDate;
     private LocalDate endDate;
 
-    public static ChallengeInfo fromEntity(Challenge challenge) {
-        return ChallengeInfo.builder()
+    public static ChallengeSummaryInfo fromEntity(Challenge challenge) {
+        return ChallengeSummaryInfo.builder()
                 .challengeName(challenge.getChallengeName())
                 .challengeCategory(challenge.getChallengeCategory())
                 .summary(challenge.getSummary())
-                .contents(challenge.getContents())
                 .participantsNum(challenge.getParticipantsNum())
+                .duration(Period.between(challenge.getStartDate(), challenge.getEndDate()).getDays())
                 .startDate(challenge.getStartDate())
                 .endDate(challenge.getEndDate())
                 .build();
