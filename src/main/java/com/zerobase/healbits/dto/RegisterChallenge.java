@@ -1,6 +1,5 @@
 package com.zerobase.healbits.dto;
 
-import com.zerobase.healbits.type.ChallengeCategory;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -51,22 +50,10 @@ public class RegisterChallenge {
 
         private String challengeName;
 
-        private ChallengeCategory challengeCategory;
-
-        private String summary;
-
-        private LocalDate startDate;
-
-        private LocalDate endDate;
-
         public static Response from(ChallengeDto challengeDto) {
             return Response.builder()
                     .email(challengeDto.getEmail())
                     .challengeName(challengeDto.getChallengeName())
-                    .challengeCategory(challengeDto.getChallengeCategory())
-                    .summary(challengeDto.getSummary())
-                    .startDate(challengeDto.getStartDate())
-                    .endDate(challengeDto.getEndDate())
                     .build();
         }
     }

@@ -1,5 +1,6 @@
 package com.zerobase.healbits.controller;
 
+import com.zerobase.healbits.dto.ChallengeDetailInfo;
 import com.zerobase.healbits.dto.ChallengeSummaryInfo;
 import com.zerobase.healbits.dto.RegisterChallenge;
 import com.zerobase.healbits.service.ChallengeService;
@@ -28,5 +29,12 @@ public class ChallengeController {
             @RequestParam String challengeCategory
     ) {
         return challengeService.getChallengeListByCategory(challengeCategory);
+    }
+
+    @GetMapping("/challenge/detail")
+    public ChallengeDetailInfo getChallengeDetail(
+            @RequestParam long challengeId
+    ) {
+        return ChallengeDetailInfo.from(challengeService.getChallengeDetail(challengeId));
     }
 }

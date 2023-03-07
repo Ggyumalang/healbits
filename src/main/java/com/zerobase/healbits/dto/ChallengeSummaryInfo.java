@@ -18,9 +18,8 @@ public class ChallengeSummaryInfo {
     private ChallengeCategory challengeCategory;
     private String summary;
     private long participantsNum;
-    private long duration;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private long challengeDuration;
+    private long remainingDaysToStart;
 
     public static ChallengeSummaryInfo fromEntity(Challenge challenge) {
         return ChallengeSummaryInfo.builder()
@@ -28,9 +27,12 @@ public class ChallengeSummaryInfo {
                 .challengeCategory(challenge.getChallengeCategory())
                 .summary(challenge.getSummary())
                 .participantsNum(challenge.getParticipantsNum())
-                .duration(Period.between(challenge.getStartDate(), challenge.getEndDate()).getDays())
-                .startDate(challenge.getStartDate())
-                .endDate(challenge.getEndDate())
+                .challengeDuration(getDuration(challenge.getStartDate(), challenge.getEndDate())+1)
+                .remainingDaysToStart(getDuration(LocalDate.now(), challenge.getStartDate()))
                 .build();
+    }
+
+    private static long getDuration(LocalDate startDate, LocalDate targetDate) {
+        return Period.between(startDate, targetDate).getDays();
     }
 }

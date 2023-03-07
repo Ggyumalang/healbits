@@ -12,11 +12,11 @@ import com.zerobase.healbits.type.ChallengeCategory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.zerobase.healbits.type.ErrorCode.CHALLENGE_CATEGORY_NOT_FOUND;
-import static com.zerobase.healbits.type.ErrorCode.EMAIL_NOT_FOUND;
+import static com.zerobase.healbits.type.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -26,24 +26,39 @@ public class ChallengeService {
     private final ChallengeRepository challengeRepository;
 
     public ChallengeDto registerChallenge(RegisterChallenge.Request request) {
+        Member member = memberRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new HealBitsException(EMAIL_NOT_FOUND));
+
+        validateStartAndEndDate(request.getStartDate(), request.getEndDate());
 
         return ChallengeDto.fromEntity(
-                saveAndGetChallenge(request, getMemberByEmail(request.getEmail()))
+                saveAndGetChallenge(request, member)
         );
     }
 
     public List<ChallengeSummaryInfo> getChallengeListByCategory(String challengeCategory) {
-        List<Challenge> challengeList = challengeRepository.findAllByChallengeCategory(
-                convertStringToChallengeCategory(challengeCategory)
+        List<Challenge> challengeList = challengeRepository.findAllByChallengeCategoryAndEndDateGreaterThanEqual(
+                convertStringToChallengeCategory(challengeCategory), LocalDate.now()
         );
         return challengeList.stream()
                 .map(ChallengeSummaryInfo::fromEntity)
                 .collect(Collectors.toList());
     }
 
-    private Member getMemberByEmail(String email) {
-        return memberRepository.findByEmail(email)
-                .orElseThrow(() -> new HealBitsException(EMAIL_NOT_FOUND));
+    public ChallengeDto getChallengeDetail(long challengeId) {
+        Challenge challenge = challengeRepository.findById(challengeId)
+                .orElseThrow(() -> new HealBitsException(CHALLENGE_NOT_FOUND));
+        return ChallengeDto.fromEntity(challenge);
+    }
+
+    private void validateStartAndEndDate(LocalDate startDate, LocalDate endDate) {
+        if(endDate.isBefore(startDate)){
+            throw new HealBitsException(END_DATE_INVALID);
+        }
+
+        if(LocalDate.now().isAfter(startDate)){
+            throw new HealBitsException(START_DATE_INVALID);
+        }
     }
 
     private Challenge saveAndGetChallenge(RegisterChallenge.Request request, Member member) {

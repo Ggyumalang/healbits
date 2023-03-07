@@ -17,8 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -72,11 +71,7 @@ class ChallengeControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.email").value("abc@daum.net"))
-                .andExpect(jsonPath("$.challengeName").value("challenge"))
-                .andExpect(jsonPath("$.challengeCategory").value("HEALTH"))
-                .andExpect(jsonPath("$.summary").value("abc"));
-//                .andExpect(jsonPath("$.startDate").value("2023-03-06"))
-//                .andExpect(jsonPath("$.endDate").value("2023-03-13"));
+                .andExpect(jsonPath("$.challengeName").value("challenge"));
     }
 
     @Test
@@ -90,18 +85,16 @@ class ChallengeControllerTest {
                                 .challengeCategory(ChallengeCategory.HEALTH)
                                 .summary("취미")
                                 .participantsNum(0)
-                                .duration(7)
-                                .startDate(LocalDate.now())
-                                .endDate(LocalDate.now().plusDays(7))
+                                .challengeDuration(7)
+                                .remainingDaysToStart(1)
                                 .build()
                         , ChallengeSummaryInfo.builder()
                                 .challengeName("취미갖기2")
                                 .challengeCategory(ChallengeCategory.HEALTH)
                                 .summary("취미2")
                                 .participantsNum(0)
-                                .duration(13)
-                                .startDate(LocalDate.now())
-                                .endDate(LocalDate.now().plusDays(13))
+                                .challengeDuration(13)
+                                .remainingDaysToStart(3)
                                 .build()
                 ));
         //when 어떤 경우에
@@ -111,9 +104,38 @@ class ChallengeControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].challengeName").value("취미갖기"))
                 .andExpect(jsonPath("$[0].challengeCategory").value("HEALTH"))
-                .andExpect(jsonPath("$[0].duration").value(7))
+                .andExpect(jsonPath("$[0].challengeDuration").value(7))
+                .andExpect(jsonPath("$[0].remainingDaysToStart").value(1))
                 .andExpect(jsonPath("$[1].challengeName").value("취미갖기2"))
                 .andExpect(jsonPath("$[1].challengeCategory").value("HEALTH"))
-                .andExpect(jsonPath("$[1].duration").value(13));
+                .andExpect(jsonPath("$[1].challengeDuration").value(13))
+                .andExpect(jsonPath("$[1].remainingDaysToStart").value(3));
+    }
+
+    @Test
+    @WithMockUser
+    void success_getChallengeDetail() throws Exception {
+        //given 어떤 데이터가 주어졌을 때
+        given(challengeService.getChallengeDetail(anyLong()))
+                .willReturn(
+                        ChallengeDto.builder()
+                                .challengeName("challenge")
+                                .challengeCategory(ChallengeCategory.HEALTH)
+                                .contents("abcdef")
+                                .participantsNum(0)
+                                .startDate(LocalDate.now().minusDays(7))
+                                .endDate(LocalDate.now().minusDays(7))
+                                .build()
+                );
+        //when 어떤 경우에
+        //then 이런 결과가 나온다.
+        mockMvc.perform(get("/challenge/detail?challengeId=1"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.challengeName").value("challenge"))
+                .andExpect(jsonPath("$.challengeCategory").value("HEALTH"))
+                .andExpect(jsonPath("$.contents").value("abcdef"))
+                .andExpect(jsonPath("$.participantsNum").value(0))
+                .andExpect(jsonPath("$.challengeStatus").value("CLOSED"));
     }
 }
