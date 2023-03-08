@@ -35,11 +35,11 @@ public class ChallengeDetailInfo {
 
     private static ChallengeStatus getChallengeStatus(LocalDate startDate, LocalDate endDate) {
         LocalDate now = LocalDate.now();
-        if(now.isBefore(startDate) || now.isEqual(startDate)){
+        if (startDate.isBefore(now)) {
             return ChallengeStatus.READY;
-        }else if(now.isBefore(endDate) || now.isEqual(endDate)){
+        } else if (now.isBefore(endDate) || now.isEqual(endDate)) {
             return ChallengeStatus.IN_PROGRESS;
-        }else {
+        } else {
             return ChallengeStatus.CLOSED;
         }
     }

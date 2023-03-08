@@ -12,12 +12,13 @@ import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/member")
 public class MemberController {
 
     private final MemberService memberService;
 
 
-    @PostMapping("/member/register")
+    @PostMapping("/register")
     public RegisterMember.Response registerMember(
             @RequestBody @Valid RegisterMember.Request request
     ) {
@@ -26,7 +27,7 @@ public class MemberController {
         );
     }
 
-    @PostMapping("/member/login")
+    @PostMapping("/login")
     public TokenInfo login(
             @RequestBody @Valid LoginMember loginMember
     ) {
@@ -36,7 +37,7 @@ public class MemberController {
         );
     }
 
-    @GetMapping("/member/info")
+    @GetMapping("/info")
     public MemberInfo getMemberInfo(
             @RequestParam("email") String email
     ){

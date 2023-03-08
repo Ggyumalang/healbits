@@ -11,6 +11,7 @@ import java.time.Period;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 @Builder
 public class ChallengeSummaryInfo {
 
