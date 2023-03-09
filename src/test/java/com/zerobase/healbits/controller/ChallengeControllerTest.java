@@ -10,6 +10,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -42,7 +46,7 @@ class ChallengeControllerTest {
     @WithMockUser
     void success_registerChallenge() throws Exception {
         //given 어떤 데이터가 주어졌을 때
-        given(challengeService.registerChallenge(any()))
+        given(challengeService.registerChallenge(any(), anyString()))
                 .willReturn(ChallengeDto.builder()
                         .email("abc@daum.net")
                         .challengeName("challenge")
@@ -59,7 +63,6 @@ class ChallengeControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(
                                 new RegisterChallenge.Request(
-                                        "abc@naver.com",
                                         "chall",
                                         "LIFE",
                                         "요약입니다",
@@ -78,38 +81,46 @@ class ChallengeControllerTest {
     @WithMockUser
     void success_getChallengeListByCategory() throws Exception {
         //given 어떤 데이터가 주어졌을 때
-        given(challengeService.getChallengeListByCategory(anyString()))
-                .willReturn(List.of(
-                        ChallengeSummaryInfo.builder()
-                                .challengeName("취미갖기")
-                                .challengeCategory(ChallengeCategory.HEALTH)
-                                .summary("취미")
-                                .participantsNum(0)
-                                .challengeDuration(7)
-                                .remainingDaysToStart(1)
-                                .build()
-                        , ChallengeSummaryInfo.builder()
-                                .challengeName("취미갖기2")
-                                .challengeCategory(ChallengeCategory.HEALTH)
-                                .summary("취미2")
-                                .participantsNum(0)
-                                .challengeDuration(13)
-                                .remainingDaysToStart(3)
-                                .build()
-                ));
+        int pageNumber = 0;
+        int pageSize = 10;
+        String sortBy = "name";
+        Sort sort = Sort.by(sortBy).ascending();
+        PageRequest pageable = PageRequest.of(pageNumber, pageSize, sort);
+
+        List<ChallengeSummaryInfo> challengeSummaryInfoList = List.of(
+                ChallengeSummaryInfo.builder()
+                        .challengeName("취미갖기")
+                        .challengeCategory(ChallengeCategory.HEALTH)
+                        .summary("취미")
+                        .participantsNum(0)
+                        .challengeDuration(7)
+                        .remainingDaysToStart(1)
+                        .build()
+                , ChallengeSummaryInfo.builder()
+                        .challengeName("취미갖기2")
+                        .challengeCategory(ChallengeCategory.HEALTH)
+                        .summary("취미2")
+                        .participantsNum(0)
+                        .challengeDuration(13)
+                        .remainingDaysToStart(3)
+                        .build());
+
+        Slice<ChallengeSummaryInfo> pageList = new SliceImpl<>(challengeSummaryInfoList, pageable, false);
+        given(challengeService.getChallengeListByCategory(anyString(), any()))
+                .willReturn(pageList);
         //when 어떤 경우에
         //then 이런 결과가 나온다.
         mockMvc.perform(get("/challenge/list?challengeCategory=HOBBY"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].challengeName").value("취미갖기"))
-                .andExpect(jsonPath("$[0].challengeCategory").value("HEALTH"))
-                .andExpect(jsonPath("$[0].challengeDuration").value(7))
-                .andExpect(jsonPath("$[0].remainingDaysToStart").value(1))
-                .andExpect(jsonPath("$[1].challengeName").value("취미갖기2"))
-                .andExpect(jsonPath("$[1].challengeCategory").value("HEALTH"))
-                .andExpect(jsonPath("$[1].challengeDuration").value(13))
-                .andExpect(jsonPath("$[1].remainingDaysToStart").value(3));
+                .andExpect(jsonPath("$.content[0].challengeName").value("취미갖기"))
+                .andExpect(jsonPath("$.content[0].challengeCategory").value("HEALTH"))
+                .andExpect(jsonPath("$.content[0].challengeDuration").value(7))
+                .andExpect(jsonPath("$.content[0].remainingDaysToStart").value(1))
+                .andExpect(jsonPath("$.content[1].challengeName").value("취미갖기2"))
+                .andExpect(jsonPath("$.content[1].challengeCategory").value("HEALTH"))
+                .andExpect(jsonPath("$.content[1].challengeDuration").value(13))
+                .andExpect(jsonPath("$.content[1].remainingDaysToStart").value(3));
     }
 
     @Test
@@ -123,8 +134,8 @@ class ChallengeControllerTest {
                                 .challengeCategory(ChallengeCategory.HEALTH)
                                 .contents("abcdef")
                                 .participantsNum(0)
-                                .startDate(LocalDate.now().minusDays(7))
-                                .endDate(LocalDate.now().minusDays(7))
+                                .startDate(LocalDate.now())
+                                .endDate(LocalDate.now().minusDays(1))
                                 .build()
                 );
         //when 어떤 경우에

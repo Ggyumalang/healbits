@@ -5,33 +5,40 @@ import com.zerobase.healbits.dto.ChallengeSummaryInfo;
 import com.zerobase.healbits.dto.RegisterChallenge;
 import com.zerobase.healbits.service.ChallengeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/challenge")
 public class ChallengeController {
     private final ChallengeService challengeService;
 
-    @PostMapping("/challenge/register")
+    @PostMapping("/register")
     public RegisterChallenge.Response registerChallenge(
-            @RequestBody @Valid RegisterChallenge.Request request
+            @RequestBody @Valid RegisterChallenge.Request request,
+            @AuthenticationPrincipal User user
     ) {
         return RegisterChallenge.Response.from(
-                challengeService.registerChallenge(request)
+                challengeService.registerChallenge(request, user.getUsername())
         );
     }
 
-    @GetMapping("/challenge/list")
-    public List<ChallengeSummaryInfo> getChallengeListByCategory(
-            @RequestParam String challengeCategory
+    @GetMapping("/list")
+    public Slice<ChallengeSummaryInfo> getChallengeListByCategory(
+            @RequestParam String challengeCategory,
+            @PageableDefault Pageable pageable
     ) {
-        return challengeService.getChallengeListByCategory(challengeCategory);
+        return challengeService.getChallengeListByCategory(challengeCategory, pageable);
     }
 
-    @GetMapping("/challenge/detail")
+    @GetMapping("/detail")
     public ChallengeDetailInfo getChallengeDetail(
             @RequestParam long challengeId
     ) {

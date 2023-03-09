@@ -4,7 +4,6 @@ import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Lob;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -15,9 +14,6 @@ public class RegisterChallenge {
     @Setter
     @AllArgsConstructor
     public static class Request {
-
-        @Email
-        private String email;
 
         @NotBlank
         private String challengeName;

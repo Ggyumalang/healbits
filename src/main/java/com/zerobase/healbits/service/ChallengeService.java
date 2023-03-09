@@ -10,11 +10,12 @@ import com.zerobase.healbits.repository.ChallengeRepository;
 import com.zerobase.healbits.repository.MemberRepository;
 import com.zerobase.healbits.type.ChallengeCategory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.zerobase.healbits.type.ErrorCode.*;
 
@@ -25,8 +26,9 @@ public class ChallengeService {
     private final MemberRepository memberRepository;
     private final ChallengeRepository challengeRepository;
 
-    public ChallengeDto registerChallenge(RegisterChallenge.Request request) {
-        Member member = memberRepository.findByEmail(request.getEmail())
+    @Transactional
+    public ChallengeDto registerChallenge(RegisterChallenge.Request request, String email) {
+        Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new HealBitsException(EMAIL_NOT_FOUND));
 
         validateStartAndEndDate(request.getStartDate(), request.getEndDate());
@@ -36,13 +38,14 @@ public class ChallengeService {
         );
     }
 
-    public List<ChallengeSummaryInfo> getChallengeListByCategory(String challengeCategory) {
-        List<Challenge> challengeList = challengeRepository.findAllByChallengeCategoryAndEndDateGreaterThanEqual(
-                convertStringToChallengeCategory(challengeCategory), LocalDate.now()
+    public Slice<ChallengeSummaryInfo> getChallengeListByCategory(
+            String challengeCategory
+            , Pageable pageable
+    ) {
+        Slice<Challenge> challengeList = challengeRepository.findAllByChallengeCategoryAndEndDateGreaterThanEqual(
+                ChallengeCategory.convertStringToChallengeCategory(challengeCategory), LocalDate.now(), pageable
         );
-        return challengeList.stream()
-                .map(ChallengeSummaryInfo::fromEntity)
-                .collect(Collectors.toList());
+        return challengeList.map(ChallengeSummaryInfo::fromEntity);
     }
 
     public ChallengeDto getChallengeDetail(long challengeId) {
@@ -52,20 +55,23 @@ public class ChallengeService {
     }
 
     private void validateStartAndEndDate(LocalDate startDate, LocalDate endDate) {
-        if(endDate.isBefore(startDate)){
+        if (endDate.isBefore(startDate) || endDate.isEqual(startDate)) {
             throw new HealBitsException(END_DATE_INVALID);
         }
 
-        if(LocalDate.now().isAfter(startDate)){
+        if (LocalDate.now().isAfter(startDate)) {
             throw new HealBitsException(START_DATE_INVALID);
         }
     }
 
     private Challenge saveAndGetChallenge(RegisterChallenge.Request request, Member member) {
         return challengeRepository.save(Challenge.builder()
-                .member(member)
+                .registeredMember(member)
                 .challengeName(request.getChallengeName())
-                .challengeCategory(convertStringToChallengeCategory(request.getChallengeCategory()))
+                .challengeCategory(ChallengeCategory
+                        .convertStringToChallengeCategory(
+                                request.getChallengeCategory())
+                )
                 .summary(request.getSummary())
                 .contents(request.getContents())
                 .startDate(request.getStartDate())
@@ -73,11 +79,5 @@ public class ChallengeService {
                 .build());
     }
 
-    private static ChallengeCategory convertStringToChallengeCategory(String challengeCategory) {
-        try {
-            return ChallengeCategory.valueOf(challengeCategory);
-        } catch (IllegalArgumentException e) {
-            throw new HealBitsException(CHALLENGE_CATEGORY_NOT_FOUND);
-        }
-    }
+
 }

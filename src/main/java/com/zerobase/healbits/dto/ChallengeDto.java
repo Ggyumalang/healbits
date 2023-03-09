@@ -24,7 +24,7 @@ public class ChallengeDto {
 
     public static ChallengeDto fromEntity(Challenge challenge) {
         return ChallengeDto.builder()
-                .email(challenge.getMember().getEmail())
+                .email(challenge.getRegisteredMember().getEmail())
                 .challengeName(challenge.getChallengeName())
                 .challengeCategory(challenge.getChallengeCategory())
                 .summary(challenge.getSummary())

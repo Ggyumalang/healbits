@@ -18,7 +18,7 @@ public class Challenge extends BaseEntity {
     private long id;
 
     @ManyToOne
-    private Member member;
+    private Member registeredMember;
 
     private String challengeName;
 

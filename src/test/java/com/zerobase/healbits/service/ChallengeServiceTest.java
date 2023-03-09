@@ -16,6 +16,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -55,7 +56,7 @@ class ChallengeServiceTest {
         given(challengeRepository.save(any()))
                 .willReturn(Challenge.builder()
                         .id(1L)
-                        .member(member)
+                        .registeredMember(member)
                         .challengeName("challenge2")
                         .challengeCategory(ChallengeCategory.HEALTH)
                         .summary("abc")
@@ -66,14 +67,13 @@ class ChallengeServiceTest {
                         .build());
         //when 어떤 경우에
         ChallengeDto challengeDto = challengeService.registerChallenge(new RegisterChallenge.Request(
-                "abc@naver.com",
                 "challenge",
                 "LIFE",
                 "요약입니다",
                 "내용입니다",
                 LocalDate.now(),
                 LocalDate.now().plusDays(14)
-        ));
+        ), "email");
         ArgumentCaptor<Challenge> captor = ArgumentCaptor.forClass(Challenge.class);
         //then 이런 결과가 나온다.
         verify(challengeRepository, times(1)).save(captor.capture());
@@ -101,14 +101,13 @@ class ChallengeServiceTest {
         //when 어떤 경우에
         HealBitsException healBitsException = assertThrows(HealBitsException.class,
                 () -> challengeService.registerChallenge(new RegisterChallenge.Request(
-                        "abc@naver.com",
                         "challenge",
                         "LIFE",
                         "요약입니다",
                         "내용입니다",
                         LocalDate.now(),
                         LocalDate.now().plusDays(14)
-                )));
+                ), "email"));
 
         //then
         assertEquals(EMAIL_NOT_FOUND, healBitsException.getErrorCode());
@@ -130,14 +129,13 @@ class ChallengeServiceTest {
         //when 어떤 경우에
         HealBitsException healBitsException = assertThrows(HealBitsException.class,
                 () -> challengeService.registerChallenge(new RegisterChallenge.Request(
-                        "abc@naver.com",
                         "challenge",
                         "LIF",
                         "요약입니다",
                         "내용입니다",
                         LocalDate.now(),
                         LocalDate.now().plusDays(14)
-                )));
+                ), "email"));
 
         //then
         assertEquals(CHALLENGE_CATEGORY_NOT_FOUND, healBitsException.getErrorCode());
@@ -159,14 +157,13 @@ class ChallengeServiceTest {
         //when 어떤 경우에
         HealBitsException healBitsException = assertThrows(HealBitsException.class,
                 () -> challengeService.registerChallenge(new RegisterChallenge.Request(
-                        "abc@naver.com",
                         "challenge",
                         "LIFE",
                         "요약입니다",
                         "내용입니다",
                         LocalDate.now(),
-                        LocalDate.now().minusDays(14)
-                )));
+                        LocalDate.now()
+                ), "email"));
 
         //then
         assertEquals(END_DATE_INVALID, healBitsException.getErrorCode());
@@ -188,14 +185,13 @@ class ChallengeServiceTest {
         //when 어떤 경우에
         HealBitsException healBitsException = assertThrows(HealBitsException.class,
                 () -> challengeService.registerChallenge(new RegisterChallenge.Request(
-                        "abc@naver.com",
                         "challenge",
                         "LIFE",
                         "요약입니다",
                         "내용입니다",
                         LocalDate.now().minusDays(1),
-                        LocalDate.now()
-                )));
+                        LocalDate.now().plusDays(1)
+                ), "abc@naver.com"));
 
         //then
         assertEquals(START_DATE_INVALID, healBitsException.getErrorCode());
@@ -204,25 +200,31 @@ class ChallengeServiceTest {
     @Test
     void success_getChallengeListByCategory() {
         //given 어떤 데이터가 주어졌을 때
-
-        given(challengeRepository.findAllByChallengeCategoryAndEndDateGreaterThanEqual(any(),any()))
-                .willReturn(List.of(Challenge.builder()
-                        .challengeName("challenge2")
-                        .challengeCategory(ChallengeCategory.HEALTH)
-                        .summary("abc")
-                        .participantsNum(3000)
-                        .startDate(LocalDate.now())
-                        .endDate(LocalDate.now().plusDays(7))
-                        .build()));
+        int pageNumber = 0;
+        int pageSize = 10;
+        String sortBy = "name";
+        Sort sort = Sort.by(sortBy).ascending();
+        PageRequest pageable = PageRequest.of(pageNumber, pageSize, sort);
+        List<Challenge> challengeList = List.of(Challenge.builder()
+                .challengeName("challenge2")
+                .challengeCategory(ChallengeCategory.HEALTH)
+                .summary("abc")
+                .participantsNum(3000)
+                .startDate(LocalDate.now())
+                .endDate(LocalDate.now().plusDays(7))
+                .build());
+        Slice<Challenge> pageList = new SliceImpl<>(challengeList, pageable, false);
+        given(challengeRepository.findAllByChallengeCategoryAndEndDateGreaterThanEqual(any(), any(), any()))
+                .willReturn(pageList);
         //when 어떤 경우에
-        List<ChallengeSummaryInfo> list = challengeService.getChallengeListByCategory("HEALTH");
+        Slice<ChallengeSummaryInfo> list = challengeService.getChallengeListByCategory("HEALTH", pageable);
         //then 이런 결과가 나온다.
-        assertEquals("challenge2", list.get(0).getChallengeName());
-        assertEquals(ChallengeCategory.HEALTH, list.get(0).getChallengeCategory());
-        assertEquals("abc", list.get(0).getSummary());
-        assertEquals(3000, list.get(0).getParticipantsNum());
-        assertEquals(8, list.get(0).getChallengeDuration());
-        assertEquals(0, list.get(0).getRemainingDaysToStart());
+        assertEquals("challenge2", list.getContent().get(0).getChallengeName());
+        assertEquals(ChallengeCategory.HEALTH, list.getContent().get(0).getChallengeCategory());
+        assertEquals("abc", list.getContent().get(0).getSummary());
+        assertEquals(3000, list.getContent().get(0).getParticipantsNum());
+        assertEquals(8, list.getContent().get(0).getChallengeDuration());
+        assertEquals(0, list.getContent().get(0).getRemainingDaysToStart());
     }
 
     @Test
@@ -231,7 +233,7 @@ class ChallengeServiceTest {
         //given 어떤 데이터가 주어졌을 때
         //when 어떤 경우에
         HealBitsException healBitsException = assertThrows(HealBitsException.class,
-                () -> challengeService.getChallengeListByCategory("LIF")
+                () -> challengeService.getChallengeListByCategory("LIF", Pageable.unpaged())
         );
 
         //then
@@ -251,7 +253,7 @@ class ChallengeServiceTest {
         given(challengeRepository.findById(anyLong()))
                 .willReturn(Optional.ofNullable(Challenge.builder()
                         .id(1L)
-                        .member(member)
+                        .registeredMember(member)
                         .challengeName("challenge")
                         .challengeCategory(ChallengeCategory.HEALTH)
                         .contents("abcdef")
