@@ -1,9 +1,9 @@
-package com.zerobase.healbits.controller;
+package com.zerobase.healbits.challenge.controller;
 
-import com.zerobase.healbits.dto.ChallengeDetailInfo;
-import com.zerobase.healbits.dto.ChallengeSummaryInfo;
-import com.zerobase.healbits.dto.RegisterChallenge;
-import com.zerobase.healbits.service.ChallengeService;
+import com.zerobase.healbits.challenge.dto.ChallengeDetailInfo;
+import com.zerobase.healbits.challenge.dto.ChallengeSummaryInfo;
+import com.zerobase.healbits.challenge.dto.RegisterChallenge;
+import com.zerobase.healbits.challenge.service.ChallengeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;

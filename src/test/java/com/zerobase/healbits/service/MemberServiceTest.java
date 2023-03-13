@@ -1,11 +1,12 @@
 package com.zerobase.healbits.service;
 
-import com.zerobase.healbits.domain.Member;
-import com.zerobase.healbits.dto.MemberDto;
-import com.zerobase.healbits.dto.MemberInfo;
-import com.zerobase.healbits.dto.RegisterMember;
+import com.zerobase.healbits.member.domain.Member;
+import com.zerobase.healbits.member.dto.MemberDto;
+import com.zerobase.healbits.member.dto.MemberInfo;
+import com.zerobase.healbits.member.dto.RegisterMember;
 import com.zerobase.healbits.exception.HealBitsException;
-import com.zerobase.healbits.repository.MemberRepository;
+import com.zerobase.healbits.member.service.MemberService;
+import com.zerobase.healbits.member.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,9 +34,6 @@ class MemberServiceTest {
 
     @Mock
     private MemberRepository memberRepository;
-
-    @Mock
-    private PasswordEncoder passwordEncoder;
 
     @InjectMocks
     private MemberService memberService;

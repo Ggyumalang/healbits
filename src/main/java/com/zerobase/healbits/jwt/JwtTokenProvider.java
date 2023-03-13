@@ -25,10 +25,10 @@ import java.util.stream.Collectors;
 @Component
 public class JwtTokenProvider {
     private final Key key;
-    private final long ACCESS_TOKEN_EXPIRE_TIME;            // 30분
-    private final long REFRESH_TOKEN_EXPIRE_TIME;  // 7일
-    private final String AUTH = "auth";
-    private final String BEARER_TYPE = "Bearer";
+    private final long ACCESS_TOKEN_EXPIRE_TIME;
+    private final long REFRESH_TOKEN_EXPIRE_TIME;
+    private final static String AUTH = "auth";
+    private final static String BEARER_TYPE = "Bearer";
 
     public JwtTokenProvider(
             @Value("${jwt.secret}") String secretKey

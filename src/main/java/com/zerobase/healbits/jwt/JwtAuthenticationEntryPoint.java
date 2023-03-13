@@ -17,11 +17,11 @@ import java.util.Map;
 @Component
 @Slf4j
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
-    private final String STATUS = "status";
-    private final String ERROR = "error";
-    private final String MESSAGE = "message";
-    private final String PATH = "path";
-    private final String UNAUTHORIZED_ERROR = "Unauthorized";
+    private final static String STATUS = "status";
+    private final static String ERROR = "error";
+    private final static String MESSAGE = "message";
+    private final static String PATH = "path";
+    private final static String UNAUTHORIZED_ERROR = "Unauthorized";
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {

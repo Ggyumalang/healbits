@@ -1,13 +1,13 @@
-package com.zerobase.healbits.service;
+package com.zerobase.healbits.challenge.service;
 
-import com.zerobase.healbits.domain.Challenge;
-import com.zerobase.healbits.domain.Member;
-import com.zerobase.healbits.dto.ChallengeDto;
-import com.zerobase.healbits.dto.ChallengeSummaryInfo;
-import com.zerobase.healbits.dto.RegisterChallenge;
+import com.zerobase.healbits.challenge.domain.Challenge;
+import com.zerobase.healbits.member.domain.Member;
+import com.zerobase.healbits.challenge.dto.ChallengeDto;
+import com.zerobase.healbits.challenge.dto.ChallengeSummaryInfo;
+import com.zerobase.healbits.challenge.dto.RegisterChallenge;
 import com.zerobase.healbits.exception.HealBitsException;
-import com.zerobase.healbits.repository.ChallengeRepository;
-import com.zerobase.healbits.repository.MemberRepository;
+import com.zerobase.healbits.challenge.repository.ChallengeRepository;
+import com.zerobase.healbits.member.repository.MemberRepository;
 import com.zerobase.healbits.type.ChallengeCategory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -56,11 +56,11 @@ public class ChallengeService {
 
     private void validateStartAndEndDate(LocalDate startDate, LocalDate endDate) {
         if (endDate.isBefore(startDate) || endDate.isEqual(startDate)) {
-            throw new HealBitsException(END_DATE_INVALID);
+            throw new HealBitsException(INVALID_END_DATE);
         }
 
         if (LocalDate.now().isAfter(startDate)) {
-            throw new HealBitsException(START_DATE_INVALID);
+            throw new HealBitsException(INVALID_START_DATE);
         }
     }
 

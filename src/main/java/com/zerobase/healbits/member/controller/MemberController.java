@@ -1,10 +1,10 @@
-package com.zerobase.healbits.controller;
+package com.zerobase.healbits.member.controller;
 
-import com.zerobase.healbits.dto.LoginMember;
-import com.zerobase.healbits.dto.MemberInfo;
-import com.zerobase.healbits.dto.RegisterMember;
+import com.zerobase.healbits.member.dto.LoginMember;
+import com.zerobase.healbits.member.dto.MemberInfo;
+import com.zerobase.healbits.member.dto.RegisterMember;
 import com.zerobase.healbits.dto.TokenInfo;
-import com.zerobase.healbits.service.MemberService;
+import com.zerobase.healbits.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,10 +1,11 @@
 package com.zerobase.healbits.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zerobase.healbits.dto.ChallengeDto;
-import com.zerobase.healbits.dto.ChallengeSummaryInfo;
-import com.zerobase.healbits.dto.RegisterChallenge;
-import com.zerobase.healbits.service.ChallengeService;
+import com.zerobase.healbits.challenge.controller.ChallengeController;
+import com.zerobase.healbits.challenge.dto.ChallengeDto;
+import com.zerobase.healbits.challenge.dto.ChallengeSummaryInfo;
+import com.zerobase.healbits.challenge.dto.RegisterChallenge;
+import com.zerobase.healbits.challenge.service.ChallengeService;
 import com.zerobase.healbits.type.ChallengeCategory;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

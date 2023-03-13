@@ -1,6 +1,6 @@
-package com.zerobase.healbits.dto;
+package com.zerobase.healbits.member.dto;
 
-import com.zerobase.healbits.domain.Member;
+import com.zerobase.healbits.member.domain.Member;
 import lombok.*;
 
 @Getter
