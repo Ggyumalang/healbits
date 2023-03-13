@@ -6,8 +6,11 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ErrorCode {
-    START_DATE_INVALID("챌린지 시작일자는 현재 날짜보다 커야합니다."),
-    END_DATE_INVALID("챌린지 종료일자는 시작일자보다 커야합니다."),
+
+    INVALID_AMOUNT("잘못된 요청 금액입니다."),
+    AMOUNT_EXCEED_BALANCE("결제를 요청하신 포인트는 잔여 포인트를 초과했습니다."),
+    INVALID_START_DATE("챌린지 시작일자는 현재 날짜보다 커야합니다."),
+    INVALID_END_DATE("챌린지 종료일자는 시작일자보다 커야합니다."),
     CHALLENGE_NOT_FOUND("등록되지 않은 챌린지입니다."),
     WRONG_DATE_FORMAT("잘못된 날짜 형식입니다."),
     CHALLENGE_CATEGORY_NOT_FOUND("등록되지 않은 챌린지 카테고리입니다."),

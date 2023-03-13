@@ -1,13 +1,13 @@
-package com.zerobase.healbits.service;
+package com.zerobase.healbits.member.service;
 
-import com.zerobase.healbits.domain.Member;
-import com.zerobase.healbits.dto.MemberDto;
-import com.zerobase.healbits.dto.MemberInfo;
-import com.zerobase.healbits.dto.RegisterMember;
+import com.zerobase.healbits.member.domain.Member;
+import com.zerobase.healbits.member.dto.MemberDto;
+import com.zerobase.healbits.member.dto.MemberInfo;
+import com.zerobase.healbits.member.dto.RegisterMember;
 import com.zerobase.healbits.dto.TokenInfo;
 import com.zerobase.healbits.exception.HealBitsException;
 import com.zerobase.healbits.jwt.JwtTokenProvider;
-import com.zerobase.healbits.repository.MemberRepository;
+import com.zerobase.healbits.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;

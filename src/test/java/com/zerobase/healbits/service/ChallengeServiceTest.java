@@ -1,13 +1,14 @@
 package com.zerobase.healbits.service;
 
-import com.zerobase.healbits.domain.Challenge;
-import com.zerobase.healbits.domain.Member;
-import com.zerobase.healbits.dto.ChallengeDto;
-import com.zerobase.healbits.dto.ChallengeSummaryInfo;
-import com.zerobase.healbits.dto.RegisterChallenge;
+import com.zerobase.healbits.challenge.domain.Challenge;
+import com.zerobase.healbits.challenge.service.ChallengeService;
+import com.zerobase.healbits.member.domain.Member;
+import com.zerobase.healbits.challenge.dto.ChallengeDto;
+import com.zerobase.healbits.challenge.dto.ChallengeSummaryInfo;
+import com.zerobase.healbits.challenge.dto.RegisterChallenge;
 import com.zerobase.healbits.exception.HealBitsException;
-import com.zerobase.healbits.repository.ChallengeRepository;
-import com.zerobase.healbits.repository.MemberRepository;
+import com.zerobase.healbits.challenge.repository.ChallengeRepository;
+import com.zerobase.healbits.member.repository.MemberRepository;
 import com.zerobase.healbits.type.ChallengeCategory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -166,7 +167,7 @@ class ChallengeServiceTest {
                 ), "email"));
 
         //then
-        assertEquals(END_DATE_INVALID, healBitsException.getErrorCode());
+        assertEquals(INVALID_END_DATE, healBitsException.getErrorCode());
     }
 
     @Test
@@ -194,7 +195,7 @@ class ChallengeServiceTest {
                 ), "abc@naver.com"));
 
         //then
-        assertEquals(START_DATE_INVALID, healBitsException.getErrorCode());
+        assertEquals(INVALID_START_DATE, healBitsException.getErrorCode());
     }
 
     @Test

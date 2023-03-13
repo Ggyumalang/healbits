@@ -1,4 +1,4 @@
-package com.zerobase.healbits.dto;
+package com.zerobase.healbits.member.dto;
 
 import lombok.*;
 
