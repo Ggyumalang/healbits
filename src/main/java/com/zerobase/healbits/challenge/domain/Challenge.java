@@ -1,5 +1,7 @@
-package com.zerobase.healbits.domain;
+package com.zerobase.healbits.challenge.domain;
 
+import com.zerobase.healbits.domain.BaseEntity;
+import com.zerobase.healbits.member.domain.Member;
 import com.zerobase.healbits.type.ChallengeCategory;
 import lombok.*;
 

@@ -2,7 +2,12 @@ package com.zerobase.healbits.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zerobase.healbits.dto.*;
-import com.zerobase.healbits.service.MemberService;
+import com.zerobase.healbits.member.controller.MemberController;
+import com.zerobase.healbits.member.dto.LoginMember;
+import com.zerobase.healbits.member.dto.MemberDto;
+import com.zerobase.healbits.member.dto.MemberInfo;
+import com.zerobase.healbits.member.dto.RegisterMember;
+import com.zerobase.healbits.member.service.MemberService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

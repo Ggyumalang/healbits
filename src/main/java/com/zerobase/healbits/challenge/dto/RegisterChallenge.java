@@ -1,4 +1,4 @@
-package com.zerobase.healbits.dto;
+package com.zerobase.healbits.challenge.dto;
 
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;

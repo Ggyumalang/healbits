@@ -1,4 +1,4 @@
-package com.zerobase.healbits.dto;
+package com.zerobase.healbits.challenge.dto;
 
 import com.zerobase.healbits.type.ChallengeCategory;
 import com.zerobase.healbits.type.ChallengeStatus;

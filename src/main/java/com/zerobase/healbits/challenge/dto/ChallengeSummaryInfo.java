@@ -1,6 +1,6 @@
-package com.zerobase.healbits.dto;
+package com.zerobase.healbits.challenge.dto;
 
-import com.zerobase.healbits.domain.Challenge;
+import com.zerobase.healbits.challenge.domain.Challenge;
 import com.zerobase.healbits.type.ChallengeCategory;
 import lombok.*;
 

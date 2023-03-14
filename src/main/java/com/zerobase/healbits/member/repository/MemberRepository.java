@@ -1,6 +1,6 @@
-package com.zerobase.healbits.repository;
+package com.zerobase.healbits.member.repository;
 
-import com.zerobase.healbits.domain.Member;
+import com.zerobase.healbits.member.domain.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
