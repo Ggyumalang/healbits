@@ -29,6 +29,7 @@ public class Transaction extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private TransactionResultType transactionResultType;
 
+    @Column(unique = true)
     private String transactionId;
 
     private long amount;

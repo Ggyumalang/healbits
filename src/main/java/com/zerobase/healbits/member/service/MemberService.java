@@ -1,14 +1,15 @@
 package com.zerobase.healbits.member.service;
 
+import com.zerobase.healbits.dto.TokenInfo;
+import com.zerobase.healbits.exception.HealBitsException;
+import com.zerobase.healbits.jwt.JwtTokenProvider;
 import com.zerobase.healbits.member.domain.Member;
 import com.zerobase.healbits.member.dto.MemberDto;
 import com.zerobase.healbits.member.dto.MemberInfo;
 import com.zerobase.healbits.member.dto.RegisterMember;
-import com.zerobase.healbits.dto.TokenInfo;
-import com.zerobase.healbits.exception.HealBitsException;
-import com.zerobase.healbits.jwt.JwtTokenProvider;
 import com.zerobase.healbits.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -17,6 +18,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,9 +27,9 @@ import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.zerobase.healbits.type.ErrorCode.EMAIL_ALREADY_EXIST;
-import static com.zerobase.healbits.type.ErrorCode.EMAIL_NOT_FOUND;
+import static com.zerobase.healbits.type.ErrorCode.*;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MemberService implements UserDetailsService {
@@ -67,7 +69,7 @@ public class MemberService implements UserDetailsService {
 
         // 2. 실제 검증 (사용자 비밀번호 체크)이 이루어지는 부분
         // authenticate 매서드가 실행될 때 loadUserByUsername 메서드가 실행
-
+        validateEmailAndPassword(email, password);
         Authentication authentication = authenticationManagerBuilder
                 .getObject()
                 .authenticate(authenticationToken);
@@ -76,10 +78,19 @@ public class MemberService implements UserDetailsService {
         return jwtTokenProvider.generateToken(authentication);
     }
 
+    private void validateEmailAndPassword(String email, String password) {
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new HealBitsException(EMAIL_NOT_FOUND));
+
+        if (!passwordEncoder.matches(password, member.getPassword())) {
+            throw new HealBitsException(PASSWORD_NOT_MATCHED);
+        }
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) {
         Member member = memberRepository.findByEmail(username)
-                .orElseThrow(() -> new HealBitsException(EMAIL_NOT_FOUND));
+                .orElseThrow(() -> new UsernameNotFoundException("USER NOT FOUND -> " + username));
 
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
         grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_USER"));

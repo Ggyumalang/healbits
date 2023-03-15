@@ -38,4 +38,8 @@ public class Challenge extends BaseEntity {
 
     private LocalDate endDate;
 
+    public void increaseParticipantsNum(){
+        participantsNum += 1;
+    }
+
 }
