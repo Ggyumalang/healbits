@@ -18,6 +18,7 @@ public enum ErrorCode {
     BAD_CREDENTIALS("자격 증명에 실패하였습니다."),
     PASSWORD_NOT_MATCHED("비밀번호가 일치하지 않습니다."),
     EMAIL_NOT_FOUND("등록되지 않은 이메일입니다."),
+    TRANSACTION_SERVER_ERROR("트랜잭션 서버 문제입니다."),
     INTERNAL_SERVER_ERROR("내부 서버 문제입니다."),
     EMAIL_ALREADY_EXIST("이미 존재하는 이메일입니다.");
 

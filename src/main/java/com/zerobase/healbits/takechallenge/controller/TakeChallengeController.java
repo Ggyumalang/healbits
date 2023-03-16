@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/take-challenge")
 public class TakeChallengeController {
 
+    private static final String authorization = "Authorization";
+
     private final TakeChallengeService takeChallengeService;
 
     @PostMapping("/participate")
@@ -27,7 +29,7 @@ public class TakeChallengeController {
     ) {
         return ParticipateChallenge.Response.from(
                 takeChallengeService.participateChallenge(
-                        request, user.getUsername(), httpRequest.getHeader("Authorization")
+                        request, user.getUsername(), httpRequest.getHeader(authorization)
                 )
         );
     }

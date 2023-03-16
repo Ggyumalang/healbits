@@ -5,7 +5,7 @@ import com.zerobase.healbits.challenge.repository.ChallengeRepository;
 import com.zerobase.healbits.exception.HealBitsException;
 import com.zerobase.healbits.member.domain.Member;
 import com.zerobase.healbits.member.repository.MemberRepository;
-import com.zerobase.healbits.resttemplate.CallUseBalanceApi;
+import com.zerobase.healbits.resttemplate.RestTemplateApi;
 import com.zerobase.healbits.takechallenge.domain.TakeChallenge;
 import com.zerobase.healbits.takechallenge.dto.ParticipateChallenge;
 import com.zerobase.healbits.takechallenge.dto.TakeChallengeDto;
@@ -28,10 +28,10 @@ public class TakeChallengeService {
 
     private final MemberRepository memberRepository;
 
-    private final CallUseBalanceApi callUseBalanceApi;
+    private final RestTemplateApi restTemplateApi;
 
     @Transactional
-    public TakeChallengeDto participateChallenge(ParticipateChallenge.Request request, String email , String token) {
+    public TakeChallengeDto participateChallenge(ParticipateChallenge.Request request, String email, String token) {
         Challenge challenge = challengeRepository.findById(request.getChallengeId())
                 .orElseThrow(() -> new HealBitsException(CHALLENGE_NOT_FOUND));
 
@@ -42,7 +42,7 @@ public class TakeChallengeService {
 
         challenge.increaseParticipantsNum();
 
-        callUseBalanceApi.call(request.getParticipationFee() , token); //TODO 이 로직으로 /transaction/use에 접근해 거래를 발생시키려고 합니다.
+        restTemplateApi.callUseBalance(request.getParticipationFee(), token);
 
         return TakeChallengeDto.fromEntity(
                 saveAndGetTakeChallenge(challenge, member, request.getParticipationFee())
@@ -66,7 +66,7 @@ public class TakeChallengeService {
             throw new HealBitsException(INVALID_AMOUNT);
         }
 
-        if(member.getBalance() < participationFee) {
+        if (member.getBalance() < participationFee) {
             throw new HealBitsException(AMOUNT_EXCEED_BALANCE);
         }
 
