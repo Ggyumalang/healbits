@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/take-challenge")
@@ -24,12 +22,11 @@ public class TakeChallengeController {
     @PostMapping("/participate")
     public ParticipateChallenge.Response participateChallenge(
             @RequestBody ParticipateChallenge.Request request,
-            @AuthenticationPrincipal User user,
-            HttpServletRequest httpRequest
+            @AuthenticationPrincipal User user
     ) {
         return ParticipateChallenge.Response.from(
                 takeChallengeService.participateChallenge(
-                        request, user.getUsername(), httpRequest.getHeader(authorization)
+                        request, user.getUsername()
                 )
         );
     }

@@ -17,6 +17,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -43,6 +44,7 @@ class TransactionServiceTest {
     private TransactionService transactionService;
 
     @Test
+    @WithMockUser
     void success_useBalance() {
         //given 어떤 데이터가 주어졌을 때
         Member member = Member.builder()
@@ -70,7 +72,7 @@ class TransactionServiceTest {
         ArgumentCaptor<Transaction> captor = ArgumentCaptor.forClass(Transaction.class);
         //when 어떤 경우에
         TransactionDto transactionDto = transactionService
-                .useBalance(new UseBalance.Request(500), "abc@1234");
+                .useBalance(new UseBalance.Request(500), "abcd@1234");
 
         //then 이런 결과가 나온다.
         verify(transactionRepository, times(1)).save(captor.capture());
@@ -78,7 +80,7 @@ class TransactionServiceTest {
         assertEquals(1000, captor.getValue().getBalanceSnapshot());
         assertEquals("khg1111@naver.com", captor.getValue().getMember().getEmail());
         assertEquals("1", transactionDto.getTransactionId());
-        assertEquals(1000, transactionDto.getAmount());
+        assertEquals("khg1111@naver.com", transactionDto.getEmail());
         assertEquals(2000, transactionDto.getBalanceSnapshot());
         assertEquals(TransactionType.USE, transactionDto.getTransactionType());
         assertEquals(TransactionResultType.SUCCESS, transactionDto.getTransactionResultType());
@@ -93,7 +95,7 @@ class TransactionServiceTest {
 
         //when 어떤 경우에
         HealBitsException healBitsException = assertThrows(HealBitsException.class, () -> transactionService
-                .useBalance(new UseBalance.Request(500), "abc@1234"));
+                .useBalance(new UseBalance.Request(500), "abcd@1234"));
 
         //then 이런 결과가 나온다.
         assertEquals(EMAIL_NOT_FOUND, healBitsException.getErrorCode());
@@ -126,15 +128,15 @@ class TransactionServiceTest {
 
         ArgumentCaptor<Transaction> captor = ArgumentCaptor.forClass(Transaction.class);
         //when 어떤 경우에
-        transactionService.saveFailedUseBalance(new UseBalance.Request(500), "abc@1234");
+        TransactionDto transactionDto = transactionService.useBalance(new UseBalance.Request(500), "abcd@1234");
 
         //then 이런 결과가 나온다.
         verify(transactionRepository, times(1)).save(captor.capture());
         assertEquals(500, captor.getValue().getAmount());
-        assertEquals(1500, captor.getValue().getBalanceSnapshot());
+        assertEquals(1000, captor.getValue().getBalanceSnapshot());
         assertEquals("khg1111@naver.com", captor.getValue().getMember().getEmail());
         assertEquals(TransactionType.USE, captor.getValue().getTransactionType());
-        assertEquals(TransactionResultType.FAIL, captor.getValue().getTransactionResultType());
+        assertEquals(TransactionResultType.FAIL, transactionDto.getTransactionResultType());
     }
 
     @Test

@@ -7,6 +7,14 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ErrorCode {
 
+    CHALLENGE_FINISHED("종료된 챌린지입니다."),
+    CHALLENGE_NOT_STARTED("시작 전 챌린지입니다."),
+    VERIFICATION_ALREADY_EXIST("금일 인증이 이미 완료되었습니다."),
+    FAILED_UPLOAD_FILE("파일 업로드에 실패하였습니다."),
+    INVALID_FILE_FORMAT("유효하지 않은 파일 형식입니다."),
+    FILE_NOT_EXIST("인증 파일이 존재하지 않습니다."),
+    VERIFICATION_USER_NOT_MATCHED("인증 ID가 챌린지 참여한 사용자 ID와 다릅니다."),
+    TAKE_CHALLENGE_NOT_FOUND("챌린지에 참여한 기록이 없습니다."),
     ALREADY_PARTICIPATED_CHALLENGE("이미 참여한 챌린지 입니다."),
     INVALID_AMOUNT("잘못된 요청 금액입니다."),
     AMOUNT_EXCEED_BALANCE("결제를 요청하신 포인트는 잔여 포인트를 초과했습니다."),

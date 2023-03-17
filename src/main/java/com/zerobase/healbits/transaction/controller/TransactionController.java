@@ -1,7 +1,6 @@
 package com.zerobase.healbits.transaction.controller;
 
 import com.zerobase.healbits.transaction.dto.ChargeBalance;
-import com.zerobase.healbits.transaction.dto.UseBalance;
 import com.zerobase.healbits.transaction.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,25 +21,6 @@ public class TransactionController {
 
     private final TransactionService transactionService;
 
-    @PostMapping("/use")
-    public UseBalance.Response useBalance(
-            @RequestBody @Valid UseBalance.Request request,
-            @AuthenticationPrincipal User user
-    ) {
-        try {
-            return UseBalance.Response.from(transactionService.useBalance(
-                    request, user.getUsername()
-            ));
-        } catch (Exception e) {
-            log.error("Failed to Use Balance By {} ", e.getMessage());
-            transactionService.saveFailedUseBalance(
-                    request,
-                    user.getUsername()
-            );
-            throw e;
-        }
-    }
-
     @PostMapping("/charge")
     public ChargeBalance.Response chargeBalance(
             @RequestBody @Valid ChargeBalance.Request request,
@@ -51,7 +31,7 @@ public class TransactionController {
                     request, user.getUsername()
             ));
         } catch (Exception e) {
-            log.error("Failed to Charge Balance By {} ", e.getMessage());
+            log.error("Failed to Charge Balance By {} ", e.toString());
             transactionService.saveFailedChargeBalance(
                     request,
                     user.getUsername()

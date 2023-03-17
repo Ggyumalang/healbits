@@ -38,7 +38,7 @@ out/
 .vscode/
 
 # AWS User-specific
-.idea/**/aws.xml
+**/src/main/resources/application-aws.yml
 
 ### Java ###
 # Compiled class file
