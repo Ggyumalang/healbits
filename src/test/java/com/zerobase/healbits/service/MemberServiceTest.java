@@ -1,12 +1,12 @@
 package com.zerobase.healbits.service;
 
+import com.zerobase.healbits.exception.HealBitsException;
 import com.zerobase.healbits.member.domain.Member;
 import com.zerobase.healbits.member.dto.MemberDto;
 import com.zerobase.healbits.member.dto.MemberInfo;
 import com.zerobase.healbits.member.dto.RegisterMember;
-import com.zerobase.healbits.exception.HealBitsException;
-import com.zerobase.healbits.member.service.MemberService;
 import com.zerobase.healbits.member.repository.MemberRepository;
+import com.zerobase.healbits.member.service.MemberService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,12 +15,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
 import static com.zerobase.healbits.type.ErrorCode.EMAIL_ALREADY_EXIST;
-import static com.zerobase.healbits.type.ErrorCode.EMAIL_NOT_FOUND;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -34,6 +34,9 @@ class MemberServiceTest {
 
     @Mock
     private MemberRepository memberRepository;
+
+    @Mock
+    private PasswordEncoder passwordEncoder;
 
     @InjectMocks
     private MemberService memberService;
@@ -115,9 +118,9 @@ class MemberServiceTest {
         given(memberRepository.findByEmail(anyString()))
                 .willReturn(Optional.empty());
         //when 어떤 경우에
-        HealBitsException healBitsException = assertThrows(HealBitsException.class, () -> memberService.loadUserByUsername("khg1111@hanmail.net"));
+        UsernameNotFoundException usernameNotFoundException = assertThrows(UsernameNotFoundException.class, () -> memberService.loadUserByUsername("khg1111@hanmail.net"));
         //then 이런 결과가 나온다.
-        assertEquals(EMAIL_NOT_FOUND, healBitsException.getErrorCode());
+        assertEquals("USER NOT FOUND -> khg1111@hanmail.net", usernameNotFoundException.getMessage());
     }
 
     @Test
@@ -148,8 +151,8 @@ class MemberServiceTest {
         given(memberRepository.findByEmail(anyString()))
                 .willReturn(Optional.empty());
         //when 어떤 경우에
-        HealBitsException healBitsException = assertThrows(HealBitsException.class, () -> memberService.getMemberInfo("khg1111@hanmail.net"));
+        UsernameNotFoundException usernameNotFoundException = assertThrows(UsernameNotFoundException.class, () -> memberService.loadUserByUsername("khg1111@hanmail.net"));
         //then 이런 결과가 나온다.
-        assertEquals(EMAIL_NOT_FOUND, healBitsException.getErrorCode());
+        assertEquals("USER NOT FOUND -> khg1111@hanmail.net", usernameNotFoundException.getMessage());
     }
 }

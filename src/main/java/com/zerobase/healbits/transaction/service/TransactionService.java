@@ -49,7 +49,7 @@ public class TransactionService {
 
         saveAndGetTransaction(request.getParticipationFee(), member, USE, FAIL);
     }
-
+    @Transactional
     public TransactionDto chargeBalance(ChargeBalance.Request request, String email) {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new HealBitsException(EMAIL_NOT_FOUND));
@@ -59,7 +59,7 @@ public class TransactionService {
                 saveAndGetTransaction(request.getChargeAmount(), member, CHARGE, SUCCESS)
         );
     }
-
+    @Transactional
     public void saveFailedChargeBalance(ChargeBalance.Request request, String email) {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new HealBitsException(EMAIL_NOT_FOUND));

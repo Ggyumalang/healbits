@@ -6,6 +6,8 @@ import com.zerobase.healbits.member.dto.RegisterMember;
 import com.zerobase.healbits.dto.TokenInfo;
 import com.zerobase.healbits.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -39,8 +41,8 @@ public class MemberController {
 
     @GetMapping("/info")
     public MemberInfo getMemberInfo(
-            @RequestParam("email") String email
+            @AuthenticationPrincipal User user
     ){
-        return memberService.getMemberInfo(email);
+        return memberService.getMemberInfo(user.getUsername());
     }
 }

@@ -2,15 +2,12 @@ package com.zerobase.healbits.exception;
 
 import com.zerobase.healbits.dto.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.HashMap;
@@ -32,32 +29,21 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ErrorResponse handleHttpMessageNotReadableException(HttpMessageNotReadableException re) {
-        log.error("WRONG_DATE_FORMAT", re);
-        return ErrorResponse.builder()
-                .errorCode(WRONG_DATE_FORMAT)
-                .errorMessage(WRONG_DATE_FORMAT.getErrorMessage())
-                .build();
+    public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException re) {
+        log.error("HttpMessageNotReadableException is occurred", re);
+        return ResponseEntity.badRequest().body(ErrorResponse.builder()
+                .errorCode(HTTP_MESSAGE_NOT_READABLE)
+                .errorMessage(re.getMessage())
+                .build());
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(InternalAuthenticationServiceException.class)
-    public ErrorResponse handleInternalAuthenticationServiceException(InternalAuthenticationServiceException ie) {
-        log.error("EMAIL NOT FOUND", ie);
-        return ErrorResponse.builder()
-                .errorCode(EMAIL_NOT_FOUND)
-                .errorMessage(EMAIL_NOT_FOUND.getErrorMessage())
-                .build();
-    }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BadCredentialsException.class)
-    public ErrorResponse handleBadCredentialsException(BadCredentialsException be) {
-        log.error("{} is occurred", be.getMessage());
-        return ErrorResponse.builder()
-                .errorCode(WRONG_PASSWORD_ERROR)
-                .errorMessage(WRONG_PASSWORD_ERROR.getErrorMessage())
-                .build();
+    public ResponseEntity<ErrorResponse> handleBadCredentialsException(BadCredentialsException be) {
+        log.error("{} is occurred", be.getMessage(), be);
+        return ResponseEntity.badRequest().body(ErrorResponse.builder()
+                .errorCode(BAD_CREDENTIALS)
+                .errorMessage(be.getMessage())
+                .build());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

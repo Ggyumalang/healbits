@@ -1,6 +1,5 @@
 package com.zerobase.healbits.transaction.controller;
 
-import com.zerobase.healbits.exception.HealBitsException;
 import com.zerobase.healbits.transaction.dto.ChargeBalance;
 import com.zerobase.healbits.transaction.dto.UseBalance;
 import com.zerobase.healbits.transaction.service.TransactionService;
@@ -32,13 +31,13 @@ public class TransactionController {
             return UseBalance.Response.from(transactionService.useBalance(
                     request, user.getUsername()
             ));
-        } catch (HealBitsException he) {
-            log.error("Failed to Use Balance By {} ", he.getErrorCode());
+        } catch (Exception e) {
+            log.error("Failed to Use Balance By {} ", e.getMessage());
             transactionService.saveFailedUseBalance(
                     request,
                     user.getUsername()
             );
-            throw he;
+            throw e;
         }
     }
 
@@ -51,13 +50,13 @@ public class TransactionController {
             return ChargeBalance.Response.from(transactionService.chargeBalance(
                     request, user.getUsername()
             ));
-        } catch (HealBitsException he) {
-            log.error("Failed to Charge Balance By {} ", he.getErrorCode());
+        } catch (Exception e) {
+            log.error("Failed to Charge Balance By {} ", e.getMessage());
             transactionService.saveFailedChargeBalance(
                     request,
                     user.getUsername()
             );
-            throw he;
+            throw e;
         }
     }
 }

@@ -39,6 +39,10 @@ public class Member extends BaseEntity {
     }
 
     public void useBalance(long amount) {
+        if (amount <= 0) {
+            throw new HealBitsException(INVALID_AMOUNT);
+        }
+
         if (amount > this.balance) {
             throw new HealBitsException(AMOUNT_EXCEED_BALANCE);
         }

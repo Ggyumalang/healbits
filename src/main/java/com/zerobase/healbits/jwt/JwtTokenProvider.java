@@ -78,7 +78,8 @@ public class JwtTokenProvider {
         Claims claims = parseClaims(accessToken);
 
         if (claims.get(AUTH) == null) {
-            throw new RuntimeException("권한 정보가 없는 토큰입니다.");
+            log.error("NO AUTHORITIES");
+            throw new JwtException("토큰에 권한 정보가 없습니다.");
         }
 
         // 클레임에서 권한 정보 가져오기
