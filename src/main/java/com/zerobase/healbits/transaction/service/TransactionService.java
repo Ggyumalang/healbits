@@ -11,7 +11,9 @@ import com.zerobase.healbits.transaction.repository.TransactionRepository;
 import com.zerobase.healbits.type.TransactionResultType;
 import com.zerobase.healbits.type.TransactionType;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -23,6 +25,7 @@ import static com.zerobase.healbits.type.TransactionResultType.SUCCESS;
 import static com.zerobase.healbits.type.TransactionType.CHARGE;
 import static com.zerobase.healbits.type.TransactionType.USE;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TransactionService {
@@ -42,13 +45,14 @@ public class TransactionService {
         );
     }
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void saveFailedUseBalance(UseBalance.Request request, String email) {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new HealBitsException(EMAIL_NOT_FOUND));
 
         saveAndGetTransaction(request.getParticipationFee(), member, USE, FAIL);
     }
+
     @Transactional
     public TransactionDto chargeBalance(ChargeBalance.Request request, String email) {
         Member member = memberRepository.findByEmail(email)
@@ -59,6 +63,7 @@ public class TransactionService {
                 saveAndGetTransaction(request.getChargeAmount(), member, CHARGE, SUCCESS)
         );
     }
+
     @Transactional
     public void saveFailedChargeBalance(ChargeBalance.Request request, String email) {
         Member member = memberRepository.findByEmail(email)

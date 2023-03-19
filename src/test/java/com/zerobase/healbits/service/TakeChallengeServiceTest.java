@@ -10,6 +10,7 @@ import com.zerobase.healbits.takechallenge.dto.ParticipateChallenge;
 import com.zerobase.healbits.takechallenge.dto.TakeChallengeDto;
 import com.zerobase.healbits.takechallenge.repository.TakeChallengeRepository;
 import com.zerobase.healbits.takechallenge.service.TakeChallengeService;
+import com.zerobase.healbits.transaction.service.TransactionService;
 import com.zerobase.healbits.type.ChallengeCategory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -40,11 +41,13 @@ class TakeChallengeServiceTest {
     private ChallengeRepository challengeRepository;
 
     @Mock
+    private TransactionService transactionService;
+
+    @Mock
     private MemberRepository memberRepository;
 
     @InjectMocks
     private TakeChallengeService takeChallengeService;
-
 
 
     @Test
@@ -84,19 +87,19 @@ class TakeChallengeServiceTest {
                         .build());
         ArgumentCaptor<TakeChallenge> captor = ArgumentCaptor.forClass(TakeChallenge.class);
         //when 어떤 경우에
-//        TakeChallengeDto takeChallengeDto = takeChallengeService
-//                .participateChallenge(new ParticipateChallenge.Request(
-//                        1, 1000
-//                ), "abc@1234");
+        TakeChallengeDto takeChallengeDto = takeChallengeService
+                .participateChallenge(new ParticipateChallenge.Request(
+                        1, 1000
+                ), "abcd1234@1234");
         //then 이런 결과가 나온다.
         verify(takeChallengeRepository, times(1)).save(captor.capture());
         assertEquals("challenge2", captor.getValue().getParticipatedChallenge().getChallengeName());
         assertEquals(1000, captor.getValue().getParticipationFee());
         assertEquals("khg1111@naver.com", captor.getValue().getParticipatedMember().getEmail());
         assertEquals(1, captor.getValue().getParticipatedChallenge().getParticipantsNum());
-//        assertEquals("khg1111@naver.com", takeChallengeDto.getEmail());
-//        assertEquals(2000, takeChallengeDto.getParticipationFee());
-//        assertEquals("challenge2", takeChallengeDto.getChallengeName());
+        assertEquals("khg1111@naver.com", takeChallengeDto.getEmail());
+        assertEquals(2000, takeChallengeDto.getParticipationFee());
+        assertEquals("challenge2", takeChallengeDto.getChallengeName());
     }
 
     @Test
@@ -107,12 +110,12 @@ class TakeChallengeServiceTest {
                 .willReturn(Optional.empty());
 
         //when 어떤 경우에
-//        HealBitsException healBitsException = assertThrows(HealBitsException.class, () -> takeChallengeService
-//                .participateChallenge(new ParticipateChallenge.Request(
-//                        1, 1000
-//                ), "abc@1234"));
+        HealBitsException healBitsException = assertThrows(HealBitsException.class, () -> takeChallengeService
+                .participateChallenge(new ParticipateChallenge.Request(
+                        1, 1000
+                ), "abcd1234@1234"));
         //then 이런 결과가 나온다.
-//        assertEquals(CHALLENGE_NOT_FOUND , healBitsException.getErrorCode());
+        assertEquals(CHALLENGE_NOT_FOUND, healBitsException.getErrorCode());
 
     }
 
@@ -138,12 +141,12 @@ class TakeChallengeServiceTest {
                 .willReturn(Optional.empty());
 
         //when 어떤 경우에
-//        HealBitsException healBitsException = assertThrows(HealBitsException.class, () -> takeChallengeService
-//                .participateChallenge(new ParticipateChallenge.Request(
-//                        1, 1000
-//                ), "abc@1234"));
-//        //then 이런 결과가 나온다.
-//        assertEquals(EMAIL_NOT_FOUND , healBitsException.getErrorCode());
+        HealBitsException healBitsException = assertThrows(HealBitsException.class, () -> takeChallengeService
+                .participateChallenge(new ParticipateChallenge.Request(
+                        1, 1000
+                ), "abcd1234@1234"));
+        //then 이런 결과가 나온다.
+        assertEquals(EMAIL_NOT_FOUND, healBitsException.getErrorCode());
     }
 
     @Test
@@ -179,12 +182,12 @@ class TakeChallengeServiceTest {
         given(takeChallengeRepository.existsByParticipatedChallengeIdAndParticipatedMemberId(anyLong(), anyLong()))
                 .willReturn(true);
         //when 어떤 경우에
-//        HealBitsException healBitsException = assertThrows(HealBitsException.class, () -> takeChallengeService
-//                .participateChallenge(new ParticipateChallenge.Request(
-//                        1, 1000
-//                ), "abc@1234"));
-//        //then 이런 결과가 나온다.
-//        assertEquals(ALREADY_PARTICIPATED_CHALLENGE , healBitsException.getErrorCode());
+        HealBitsException healBitsException = assertThrows(HealBitsException.class, () -> takeChallengeService
+                .participateChallenge(new ParticipateChallenge.Request(
+                        1, 1000
+                ), "abcd1234@1234"));
+        //then 이런 결과가 나온다.
+        assertEquals(ALREADY_PARTICIPATED_CHALLENGE, healBitsException.getErrorCode());
     }
 
     @Test
@@ -220,12 +223,12 @@ class TakeChallengeServiceTest {
         given(takeChallengeRepository.existsByParticipatedChallengeIdAndParticipatedMemberId(anyLong(), anyLong()))
                 .willReturn(false);
         //when 어떤 경우에
-//        HealBitsException healBitsException = assertThrows(HealBitsException.class, () -> takeChallengeService
-//                .participateChallenge(new ParticipateChallenge.Request(
-//                        1, 1000
-//                ), "abc@1234"));
-//        //then 이런 결과가 나온다.
-//        assertEquals(INVALID_START_DATE , healBitsException.getErrorCode());
+        HealBitsException healBitsException = assertThrows(HealBitsException.class, () -> takeChallengeService
+                .participateChallenge(new ParticipateChallenge.Request(
+                        1, 1000
+                ), "abcd1234@1234"));
+        //then 이런 결과가 나온다.
+        assertEquals(INVALID_START_DATE, healBitsException.getErrorCode());
     }
 
     @Test
@@ -261,12 +264,53 @@ class TakeChallengeServiceTest {
         given(takeChallengeRepository.existsByParticipatedChallengeIdAndParticipatedMemberId(anyLong(), anyLong()))
                 .willReturn(false);
         //when 어떤 경우에
-//        HealBitsException healBitsException = assertThrows(HealBitsException.class, () -> takeChallengeService
-//                .participateChallenge(new ParticipateChallenge.Request(
-//                        1, -1
-//                ), "abc@1234"));
-//        //then 이런 결과가 나온다.
-//        assertEquals(INVALID_AMOUNT , healBitsException.getErrorCode());
+        HealBitsException healBitsException = assertThrows(HealBitsException.class, () -> takeChallengeService
+                .participateChallenge(new ParticipateChallenge.Request(
+                        1, 0
+                ), "abcd1234@1234"));
+        //then 이런 결과가 나온다.
+        assertEquals(INVALID_AMOUNT, healBitsException.getErrorCode());
+    }
+
+    @Test
+    @DisplayName("AMOUNT_EXCEED_BALANCE_participateChallenge")
+    void AMOUNT_EXCEED_BALANCE_participateChallenge() {
+        //given 어떤 데이터가 주어졌을 때
+        Member member = Member.builder()
+                .email("khg1111@naver.com")
+                .password("1234")
+                .name("홍길")
+                .phone("01011112222")
+                .balance(2000)
+                .build();
+
+        Challenge challenge = Challenge.builder()
+                .id(1L)
+                .registeredMember(member)
+                .challengeName("challenge2")
+                .challengeCategory(ChallengeCategory.HEALTH)
+                .summary("abc")
+                .contents("abcdef")
+                .participantsNum(0)
+                .startDate(LocalDate.now())
+                .endDate(LocalDate.now().plusDays(7))
+                .build();
+
+        given(challengeRepository.findById(anyLong()))
+                .willReturn(Optional.ofNullable(challenge));
+
+        given(memberRepository.findByEmail(anyString()))
+                .willReturn(Optional.ofNullable(member));
+
+        given(takeChallengeRepository.existsByParticipatedChallengeIdAndParticipatedMemberId(anyLong(), anyLong()))
+                .willReturn(false);
+        //when 어떤 경우에
+        HealBitsException healBitsException = assertThrows(HealBitsException.class, () -> takeChallengeService
+                .participateChallenge(new ParticipateChallenge.Request(
+                        1, 3000
+                ), "abcd1234@1234"));
+        //then 이런 결과가 나온다.
+        assertEquals(AMOUNT_EXCEED_BALANCE, healBitsException.getErrorCode());
     }
 
 }

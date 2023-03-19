@@ -12,7 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table (
+@Table(
         uniqueConstraints = {
                 @UniqueConstraint(
                         columnNames = {"participated_member_Id", "participated_challenge_id"}
@@ -26,9 +26,11 @@ public class TakeChallenge extends BaseEntity {
     private long id;
 
     @ManyToOne
+    @JoinColumn(name = "participated_member_id")
     private Member participatedMember;
 
     @ManyToOne
+    @JoinColumn(name = "participated_challenge_id")
     private Challenge participatedChallenge;
 
     private long participationFee;

@@ -23,6 +23,7 @@ public class UseBalance {
 
     @Getter
     @Setter
+    @ToString
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder

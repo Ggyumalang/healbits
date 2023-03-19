@@ -20,6 +20,7 @@ public class Challenge extends BaseEntity {
     private long id;
 
     @ManyToOne
+    @JoinColumn(name = "registered_member_id")
     private Member registeredMember;
 
     private String challengeName;
