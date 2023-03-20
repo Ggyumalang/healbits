@@ -7,6 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ErrorCode {
 
+    CHALLENGE_STATUS_NOT_FOUND("등록되지 않은 챌린지 상태입니다."),
     CHALLENGE_FINISHED("종료된 챌린지입니다."),
     CHALLENGE_NOT_STARTED("시작 전 챌린지입니다."),
     VERIFICATION_ALREADY_EXIST("금일 인증이 이미 완료되었습니다."),

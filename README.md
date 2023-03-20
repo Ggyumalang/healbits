@@ -64,10 +64,7 @@ TakeChallenge : Verification( 1 : N )
 
 **[챌린지 개설하기]**
 
-- 카테고리 , 제목, 요약설명, 설명, 챌린지 기간, 참가자 수 , 상태(진행 전, 진행 중, 종료)
-    
-    , 챌린지 시작 날짜 , 챌린지 종료날짜 등을 저장
-    
+- 카테고리 , 제목, 요약설명, 설명, 참가자 수, 챌린지 시작 날짜 , 챌린지 종료날짜 등을 저장
 - 챌린지의 주기는 하루에 한 번 인증을 해야한다고 가정
 
 **[챌린지 인증하기]**
@@ -309,6 +306,212 @@ TakeChallenge : Verification( 1 : N )
         "challengeStatus": "ACTIVE",
         "startDate": "2023-03-10",
         "endDate": "2023-03-11"
+    }
+    ```
+
+## 7. 잔액 충전 API
+
+- POST /transaction/charge
+- 파라미터 : 충전 금액
+- 정책 :  등록되지 않은 이메일인 경우 , 충전 금액이 0이하인 경우 실패 응답하며 해당 내용을 transaction table에 저장
+- 성공 응답 : 이메일 , 거래결과타입 , 거래Id , 충전금액, 잔액
+
+### 상세 정보
+
+- 저장이 필요한 정보
+
+| 컬럼명 | 데이터 타입 | 설명 |
+| --- | --- | --- |
+| id | pk
+(Long) | primary key |
+| member | Member | 회원테이블과 거래 테이블은 1:N 관계이다. |
+| transactionType | String | 거래타입 (사용 , 충전) |
+| transactionResultType | String | 거래결과타입 (성공,실패) |
+| transactionId | String | 거래Id |
+| amount | long | 거래금액 |
+| balanceSnapshot | long | 거래 후 잔액 |
+| registeredDateTime | LocalDateTime | 등록일시 |
+| updatedDatetime | LocalDateTime | 수정일시 |
+- 요청 / 응답 구조
+  - 요청
+
+    ```java
+    {
+        "chargeAmount" : 700
+    }
+    ```
+
+  - 응답
+
+    ```java
+    {
+        "email": "khg2154@gmail.com",
+        "transactionResultType": "SUCCESS",
+        "transactionId": "ba83c3740a494edaadf274a7d4d542ff",
+        "chargeAmount": 700,
+        "balanceSnapshot": 1050
+    }
+    ```
+
+
+## 8. 챌린지 참여 API
+
+- POST /take-challenge/participate
+- 파라미터 : 챌린지Id , 참가비
+- 정책 : 챌린지 참여 중 잔액 사용 로직으로 참가자의 잔액 사용, 동일한 사람이 중복해서 챌린지에 등록하려는 경우 , 등록되지않은 챌린지인 경우 , 등록되지 않은 이메일인 경우, 챌린지의 시작 일자가 현재 일자보다 과거일 경우 ,  참가비가 0 이하인 경우 실패응답
+- 성공 응답 : 이메일 , 챌린지명 , 참가비 , 잔액
+
+### 상세 정보
+
+- 저장이 필요한 정보
+
+| 컬럼명 | 데이터 타입 | 설명 |
+| --- | --- | --- |
+| id | pk
+(Long) | primary key |
+| participatedMember | Member | 회원테이블과 챌린지 참여 테이블은 1:N 관계이다. |
+| participatedChallenge | Challenge | 챌린지 테이블과 챌린지 참여 테이블은 1:N 관계이다. |
+| participationFee | long | 챌린지 참가비 |
+| registeredDateTime | LocalDateTime | 등록일시 |
+| updatedDatetime | LocalDateTime | 수정일시 |
+
+## 8-1. 잔액 사용 서비스
+
+- POST /take-challenge/participate 챌린지 참여하기 내에서 사용되는 잔액 사용 서비스
+- 파라미터 : 참가비 , 이메일
+- 정책 :  등록되지 않은 이메일인 경우 , 참가비가 0이하인 경우,  회원의 잔액보다 참가비가 높은 경우 실패 응답도 transaction 테이블에 거래 실패로 저장
+- 성공 응답 : 이메일 , 거래결과타입 , 거래Id , 참가비, 잔액
+
+### 상세 정보
+
+- 저장이 필요한 정보(Transaction Table)
+
+| 컬럼명 | 데이터 타입 | 설명 |
+| --- | --- | --- |
+| id | pk
+(Long) | primary key |
+| member | Member | 회원테이블과 거래 테이블은 1:N 관계이다. |
+| transactionType | String | 거래타입 (사용 , 충전) |
+| transactionResultType | String | 거래결과타입 (성공,실패) |
+| transactionId | String | 거래Id |
+| amount | long | 거래금액 |
+| balanceSnapshot | long | 거래 후 잔액 |
+| registeredDateTime | LocalDateTime | 등록일시 |
+| updatedDatetime | LocalDateTime | 수정일시 |
+- 요청 / 응답 구조
+  - 요청
+
+    ```java
+    {
+        "participationFee" : 50,
+    		"email" : "abcd@1234"
+    }
+    ```
+
+  - 응답
+
+    ```java
+    {
+        "email": "abcd@gmail.com",
+        "challengeName": "challenge",
+        "participationFee": 50,
+        "balance": 450
+    }
+    ```
+
+
+## 9. 참여 챌린지 조회API
+
+- GET /take-challenge?challengeStatus={challengeStatus}
+- 파라미터 : verifiedTakeChallengeId
+- 정책 :  참여 챌린지의 상태 ( 시작 전 , 진행 중 , 종료 ) 에 따른 조회 , 등록되지 않은 회원이거나 , challengeStatus가 등록되지 않은 값이 들어오면 실패 응답
+- 성공 응답 : 챌린지명 ,  챌린지 요약 설명  , 챌린지 시작 일자, 종료 일자
+- 요청 / 응답 구조
+  - 요청
+
+    ```java
+    GET /take-challenge?challengeStatus={challengeStatus}
+    ```
+
+  - 응답
+
+    ```java
+    [
+        {
+            "challengeName": "공부",
+            "summary": "매일 3회 스터디",
+            "startDate": "2023-03-31",
+            "endDate": "2023-04-20"
+        }
+    ]
+    ```
+
+
+## 10. 챌린지 인증 API
+
+- POST /verification
+- 파라미터 : form-data형식 : verifiedTakeChallengeId, 이미지파일
+- 정책 : 인증 ID가 챌린지 참여한 사용자 ID와 다른 경우 , File이 들어오지 않은 경우 , 이미 인증이 된 경우, 챌린지가 아직 시작 전인 경우, 챌린지가 끝난 경우 실패 응답
+- 성공 응답 : 이메일 , 챌린지명 , 인증날짜 , 이미지경로
+
+### 상세 정보
+
+- 저장이 필요한 정보
+
+| 컬럼명 | 데이터 타입 | 설명 |
+| --- | --- | --- |
+| id | pk
+(Long) | primary key |
+| takeChallenge | TakeChallenge | 챌린지 참여 테이블과 인증 테이블은 1:N 관계이다. |
+| verifiedDate | LocalDate | 인증날짜 |
+| imagePath | String | 이미지 경로 |
+| registeredDateTime | LocalDateTime | 등록일시 |
+| updatedDatetime | LocalDateTime | 수정일시 |
+- 요청 / 응답 구조
+  - 요청
+
+    ```java
+    form-data형식 : verifiedTakeChallengeId, 이미지파일
+    ```
+
+  - 응답
+
+    ```java
+    {
+        "email": "abc2154@gmail.com",
+        "challengeName": "독서하기",
+        "verifiedDate": "2023-03-17",
+        "imagePath": "HOBBY/독서하기/abc2154@gmail.com/729bdb348b264f7983db8aeaeb89cdf0_20230317.jpg"
+    }
+    ```
+
+
+## 11. 챌린지 인증 조회API
+
+- GET /verification?verifiedTakeChallengeId={verifiedTakeChallengeId}
+- 파라미터 : verifiedTakeChallengeId
+- 정책 :  해당 챌린지에 참여한 적이 없는 경우 실패 응답
+- 성공 응답 : 이메일 , 챌린지명 , 참가비 , 잔액
+- 요청 / 응답 구조
+  - 요청
+
+    ```java
+    GET /verification?verifiedTakeChallengeId={verifiedTakeChallengeId}
+    ```
+
+  - 응답
+
+    ```java
+    {
+        "dateAndImagesList": [
+            {
+                "verifiedDate": "2023-03-17",
+                "imageUrl": "https://healbits.s3.ap-northeast-2.amazonaws.com/HOBBY/%EB%8F%85%EC%84%9C%ED%95%98%EA%B8%B/abcd%40gmail.com/729bdb348b264f7983db8aeaeb89cdf0_20230317.jpg"
+            }
+        ],
+        "verifiedCnt": 1,
+        "remainVerificationCnt": 7,
+        "verificationRate": "12.50%"
     }
     ```
 ---

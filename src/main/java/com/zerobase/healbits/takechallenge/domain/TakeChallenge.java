@@ -3,12 +3,14 @@ package com.zerobase.healbits.takechallenge.domain;
 import com.zerobase.healbits.challenge.domain.Challenge;
 import com.zerobase.healbits.domain.BaseEntity;
 import com.zerobase.healbits.member.domain.Member;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

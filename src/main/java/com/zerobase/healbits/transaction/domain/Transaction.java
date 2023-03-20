@@ -4,7 +4,10 @@ import com.zerobase.healbits.domain.BaseEntity;
 import com.zerobase.healbits.member.domain.Member;
 import com.zerobase.healbits.type.TransactionResultType;
 import com.zerobase.healbits.type.TransactionType;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

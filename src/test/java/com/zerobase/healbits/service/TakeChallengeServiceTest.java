@@ -8,6 +8,7 @@ import com.zerobase.healbits.member.repository.MemberRepository;
 import com.zerobase.healbits.takechallenge.domain.TakeChallenge;
 import com.zerobase.healbits.takechallenge.dto.ParticipateChallenge;
 import com.zerobase.healbits.takechallenge.dto.TakeChallengeDto;
+import com.zerobase.healbits.takechallenge.dto.TakeChallengeInfo;
 import com.zerobase.healbits.takechallenge.repository.TakeChallengeRepository;
 import com.zerobase.healbits.takechallenge.service.TakeChallengeService;
 import com.zerobase.healbits.transaction.service.TransactionService;
@@ -21,6 +22,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import static com.zerobase.healbits.type.ErrorCode.*;
@@ -311,6 +313,106 @@ class TakeChallengeServiceTest {
                 ), "abcd1234@1234"));
         //then 이런 결과가 나온다.
         assertEquals(AMOUNT_EXCEED_BALANCE, healBitsException.getErrorCode());
+    }
+
+    @Test
+    void success_getTookChallengeListByChallengeStatus() {
+        //given 어떤 데이터가 주어졌을 때
+        Member member = Member.builder()
+                .email("khg1111@naver.com")
+                .password("1234")
+                .name("홍길")
+                .phone("01011112222")
+                .balance(2000)
+                .build();
+
+        given(memberRepository.findByEmail(anyString()))
+                .willReturn(Optional.ofNullable(member));
+        //시작 전
+//        given(takeChallengeRepository.findAllByParticipatedMemberIdAndReady(anyLong(), any()))
+//                .willReturn(List.of(
+//                        TakeChallengeInfo.builder()
+//                                .challengeName("challenge")
+//                                .summary("test")
+//                                .startDate(LocalDate.now().plusDays(1))
+//                                .endDate(LocalDate.now().plusDays(3))
+//                                .build()
+//                ));
+         //진행중
+//        given(takeChallengeRepository.findAllByParticipatedMemberIdAndInProgress(anyLong(), any()))
+//                .willReturn(List.of(
+//                        TakeChallengeInfo.builder()
+//                                .challengeName("challenge")
+//                                .summary("test")
+//                                .startDate(LocalDate.now().minusDays(1))
+//                                .endDate(LocalDate.now().plusDays(1))
+//                                .build()
+//                ));
+//      종료
+        given(takeChallengeRepository.findAllByParticipatedMemberIdAndClosed(anyLong(), any()))
+                .willReturn(List.of(
+                        TakeChallengeInfo.builder()
+                                .challengeName("challenge")
+                                .summary("test")
+                                .startDate(LocalDate.now().minusDays(3))
+                                .endDate(LocalDate.now().minusDays(1))
+                                .build()
+                ));
+
+        //when 어떤 경우에
+        List<TakeChallengeInfo> takeChallengeInfoList = takeChallengeService
+                .getTookChallengeListByChallengeStatus("CLOSED","abcd@1234");
+        //then 이런 결과가 나온다.
+        assertEquals("challenge" , takeChallengeInfoList.get(0).getChallengeName());
+        assertEquals("test" , takeChallengeInfoList.get(0).getSummary());
+//        assertEquals(LocalDate.now().plusDays(1) , takeChallengeInfoList.get(0).getStartDate());
+//        assertEquals(LocalDate.now().plusDays(3) , takeChallengeInfoList.get(0).getEndDate());
+//        assertEquals(LocalDate.now().minusDays(1) , takeChallengeInfoList.get(0).getStartDate());
+//        assertEquals(LocalDate.now().plusDays(1) , takeChallengeInfoList.get(0).getEndDate());
+        assertEquals(LocalDate.now().minusDays(3) , takeChallengeInfoList.get(0).getStartDate());
+        assertEquals(LocalDate.now().minusDays(1) , takeChallengeInfoList.get(0).getEndDate());
+    }
+
+    @Test
+    @DisplayName("EMAIL_NOT_FOUND_getTookChallengeListByChallengeStatus")
+    void EMAIL_NOT_FOUND_getTookChallengeListByChallengeStatus() {
+        //given 어떤 데이터가 주어졌을 때
+        given(memberRepository.findByEmail(anyString()))
+                .willReturn(Optional.empty());
+
+        //when 어떤 경우에
+        HealBitsException healBitsException = assertThrows(HealBitsException.class,
+                () -> takeChallengeService
+                .getTookChallengeListByChallengeStatus(
+                        "CLOSED","abcd@1234"
+                ));
+        //then 이런 결과가 나온다.
+        assertEquals(EMAIL_NOT_FOUND, healBitsException.getErrorCode());
+    }
+
+    @Test
+    @DisplayName("CHALLENGE_STATUS_NOT_FOUND_getTookChallengeListByChallengeStatus")
+    void CHALLENGE_STATUS_NOT_FOUND_getTookChallengeListByChallengeStatus() {
+        //given 어떤 데이터가 주어졌을 때
+        Member member = Member.builder()
+                .email("khg1111@naver.com")
+                .password("1234")
+                .name("홍길")
+                .phone("01011112222")
+                .balance(2000)
+                .build();
+
+        given(memberRepository.findByEmail(anyString()))
+                .willReturn(Optional.ofNullable(member));
+
+        //when 어떤 경우에
+        HealBitsException healBitsException = assertThrows(HealBitsException.class,
+                () -> takeChallengeService
+                        .getTookChallengeListByChallengeStatus(
+                                "TATA","abcd@1234"
+                        ));
+        //then 이런 결과가 나온다.
+        assertEquals(CHALLENGE_STATUS_NOT_FOUND, healBitsException.getErrorCode());
     }
 
 }

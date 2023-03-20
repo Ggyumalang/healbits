@@ -8,16 +8,20 @@ import com.zerobase.healbits.member.repository.MemberRepository;
 import com.zerobase.healbits.takechallenge.domain.TakeChallenge;
 import com.zerobase.healbits.takechallenge.dto.ParticipateChallenge;
 import com.zerobase.healbits.takechallenge.dto.TakeChallengeDto;
+import com.zerobase.healbits.takechallenge.dto.TakeChallengeInfo;
 import com.zerobase.healbits.takechallenge.repository.TakeChallengeRepository;
 import com.zerobase.healbits.transaction.dto.TransactionDto;
 import com.zerobase.healbits.transaction.dto.UseBalance;
 import com.zerobase.healbits.transaction.service.TransactionService;
+import com.zerobase.healbits.type.ChallengeStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Objects;
 
 import static com.zerobase.healbits.type.ErrorCode.*;
 
@@ -96,5 +100,29 @@ public class TakeChallengeService {
                 .participatedMember(member)
                 .participationFee(participationFee)
                 .build());
+    }
+
+    public List<TakeChallengeInfo> getTookChallengeListByChallengeStatus(
+            String challengeStatus, String email
+    ) {
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new HealBitsException(EMAIL_NOT_FOUND));
+
+        return getTakeChallengeInfoList(challengeStatus, member);
+    }
+
+    private List<TakeChallengeInfo> getTakeChallengeInfoList(String challengeStatus, Member member) {
+        if (Objects.equals(challengeStatus, ChallengeStatus.READY.name())) {
+            return takeChallengeRepository
+                    .findAllByParticipatedMemberIdAndReady(member.getId(), LocalDate.now());
+        } else if (Objects.equals(challengeStatus, ChallengeStatus.IN_PROGRESS.name())) {
+            return takeChallengeRepository
+                    .findAllByParticipatedMemberIdAndInProgress(member.getId(), LocalDate.now());
+        } else if (Objects.equals(challengeStatus, ChallengeStatus.CLOSED.name())) {
+            return takeChallengeRepository
+                    .findAllByParticipatedMemberIdAndClosed(member.getId(), LocalDate.now());
+        } else {
+            throw new HealBitsException(CHALLENGE_STATUS_NOT_FOUND);
+        }
     }
 }
