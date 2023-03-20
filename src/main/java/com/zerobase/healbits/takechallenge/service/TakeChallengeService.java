@@ -103,7 +103,7 @@ public class TakeChallengeService {
     }
 
     public List<TakeChallengeInfo> getTookChallengeListByChallengeStatus(
-            String challengeStatus, String email
+            ChallengeStatus challengeStatus, String email
     ) {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new HealBitsException(EMAIL_NOT_FOUND));
@@ -111,14 +111,14 @@ public class TakeChallengeService {
         return getTakeChallengeInfoList(challengeStatus, member);
     }
 
-    private List<TakeChallengeInfo> getTakeChallengeInfoList(String challengeStatus, Member member) {
-        if (Objects.equals(challengeStatus, ChallengeStatus.READY.name())) {
+    private List<TakeChallengeInfo> getTakeChallengeInfoList(ChallengeStatus challengeStatus, Member member) {
+        if (Objects.equals(challengeStatus, ChallengeStatus.READY)) {
             return takeChallengeRepository
                     .findAllByParticipatedMemberIdAndReady(member.getId(), LocalDate.now());
-        } else if (Objects.equals(challengeStatus, ChallengeStatus.IN_PROGRESS.name())) {
+        } else if (Objects.equals(challengeStatus, ChallengeStatus.IN_PROGRESS)) {
             return takeChallengeRepository
                     .findAllByParticipatedMemberIdAndInProgress(member.getId(), LocalDate.now());
-        } else if (Objects.equals(challengeStatus, ChallengeStatus.CLOSED.name())) {
+        } else if (Objects.equals(challengeStatus, ChallengeStatus.CLOSED)) {
             return takeChallengeRepository
                     .findAllByParticipatedMemberIdAndClosed(member.getId(), LocalDate.now());
         } else {

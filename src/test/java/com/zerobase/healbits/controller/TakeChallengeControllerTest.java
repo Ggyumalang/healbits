@@ -21,8 +21,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -69,7 +69,7 @@ class TakeChallengeControllerTest {
     @WithMockUser
     void success_getTookChallengeInfoByChallengeStatus() throws Exception {
         //given 어떤 데이터가 주어졌을 때
-        given(takeChallengeService.getTookChallengeListByChallengeStatus(anyString(), anyString()))
+        given(takeChallengeService.getTookChallengeListByChallengeStatus(any(), anyString()))
                 .willReturn(List.of(
                         TakeChallengeInfo.builder()
                                 .challengeName("challenge")

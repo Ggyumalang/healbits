@@ -3,6 +3,7 @@ package com.zerobase.healbits.takechallenge.controller;
 import com.zerobase.healbits.takechallenge.dto.ParticipateChallenge;
 import com.zerobase.healbits.takechallenge.dto.TakeChallengeInfo;
 import com.zerobase.healbits.takechallenge.service.TakeChallengeService;
+import com.zerobase.healbits.type.ChallengeStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
@@ -14,8 +15,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/take-challenge")
 public class TakeChallengeController {
-
-    private static final String authorization = "Authorization";
 
     private final TakeChallengeService takeChallengeService;
 
@@ -33,11 +32,11 @@ public class TakeChallengeController {
 
     @GetMapping("/info")
     public List<TakeChallengeInfo> getTookChallengeInfoByChallengeStatus(
-            @RequestParam String challengeStatus,
+            @RequestParam ChallengeStatus challengeStatus,
             @AuthenticationPrincipal User user
     ) {
         return takeChallengeService.getTookChallengeListByChallengeStatus(
-                        challengeStatus , user.getUsername()
+                challengeStatus, user.getUsername()
         );
     }
 }

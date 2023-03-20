@@ -13,6 +13,7 @@ import com.zerobase.healbits.takechallenge.repository.TakeChallengeRepository;
 import com.zerobase.healbits.takechallenge.service.TakeChallengeService;
 import com.zerobase.healbits.transaction.service.TransactionService;
 import com.zerobase.healbits.type.ChallengeCategory;
+import com.zerobase.healbits.type.ChallengeStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -338,7 +339,7 @@ class TakeChallengeServiceTest {
 //                                .endDate(LocalDate.now().plusDays(3))
 //                                .build()
 //                ));
-         //진행중
+        //진행중
 //        given(takeChallengeRepository.findAllByParticipatedMemberIdAndInProgress(anyLong(), any()))
 //                .willReturn(List.of(
 //                        TakeChallengeInfo.builder()
@@ -361,16 +362,16 @@ class TakeChallengeServiceTest {
 
         //when 어떤 경우에
         List<TakeChallengeInfo> takeChallengeInfoList = takeChallengeService
-                .getTookChallengeListByChallengeStatus("CLOSED","abcd@1234");
+                .getTookChallengeListByChallengeStatus(ChallengeStatus.CLOSED, "abcd@1234");
         //then 이런 결과가 나온다.
-        assertEquals("challenge" , takeChallengeInfoList.get(0).getChallengeName());
-        assertEquals("test" , takeChallengeInfoList.get(0).getSummary());
+        assertEquals("challenge", takeChallengeInfoList.get(0).getChallengeName());
+        assertEquals("test", takeChallengeInfoList.get(0).getSummary());
 //        assertEquals(LocalDate.now().plusDays(1) , takeChallengeInfoList.get(0).getStartDate());
 //        assertEquals(LocalDate.now().plusDays(3) , takeChallengeInfoList.get(0).getEndDate());
 //        assertEquals(LocalDate.now().minusDays(1) , takeChallengeInfoList.get(0).getStartDate());
 //        assertEquals(LocalDate.now().plusDays(1) , takeChallengeInfoList.get(0).getEndDate());
-        assertEquals(LocalDate.now().minusDays(3) , takeChallengeInfoList.get(0).getStartDate());
-        assertEquals(LocalDate.now().minusDays(1) , takeChallengeInfoList.get(0).getEndDate());
+        assertEquals(LocalDate.now().minusDays(3), takeChallengeInfoList.get(0).getStartDate());
+        assertEquals(LocalDate.now().minusDays(1), takeChallengeInfoList.get(0).getEndDate());
     }
 
     @Test
@@ -383,36 +384,11 @@ class TakeChallengeServiceTest {
         //when 어떤 경우에
         HealBitsException healBitsException = assertThrows(HealBitsException.class,
                 () -> takeChallengeService
-                .getTookChallengeListByChallengeStatus(
-                        "CLOSED","abcd@1234"
-                ));
-        //then 이런 결과가 나온다.
-        assertEquals(EMAIL_NOT_FOUND, healBitsException.getErrorCode());
-    }
-
-    @Test
-    @DisplayName("CHALLENGE_STATUS_NOT_FOUND_getTookChallengeListByChallengeStatus")
-    void CHALLENGE_STATUS_NOT_FOUND_getTookChallengeListByChallengeStatus() {
-        //given 어떤 데이터가 주어졌을 때
-        Member member = Member.builder()
-                .email("khg1111@naver.com")
-                .password("1234")
-                .name("홍길")
-                .phone("01011112222")
-                .balance(2000)
-                .build();
-
-        given(memberRepository.findByEmail(anyString()))
-                .willReturn(Optional.ofNullable(member));
-
-        //when 어떤 경우에
-        HealBitsException healBitsException = assertThrows(HealBitsException.class,
-                () -> takeChallengeService
                         .getTookChallengeListByChallengeStatus(
-                                "TATA","abcd@1234"
+                                ChallengeStatus.READY, "abcd@1234"
                         ));
         //then 이런 결과가 나온다.
-        assertEquals(CHALLENGE_STATUS_NOT_FOUND, healBitsException.getErrorCode());
+        assertEquals(EMAIL_NOT_FOUND, healBitsException.getErrorCode());
     }
 
 }
