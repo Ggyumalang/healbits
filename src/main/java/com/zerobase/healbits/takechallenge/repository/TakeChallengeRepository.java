@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface TakeChallengeRepository extends JpaRepository<TakeChallenge, Long> {
+public interface TakeChallengeRepository extends JpaRepository<TakeChallenge, Long>, TakeChallengeRepositoryCustom {
     boolean existsByParticipatedChallengeIdAndParticipatedMemberId(long challengeId, long memberId);
+
 }
