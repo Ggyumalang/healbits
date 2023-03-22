@@ -37,4 +37,8 @@ public class TakeChallenge extends BaseEntity {
 
     private long participationFee;
 
+    public void completeTookChallenge(){
+        this.participationFee = -1;
+    }
+
 }

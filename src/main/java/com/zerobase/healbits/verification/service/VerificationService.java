@@ -4,6 +4,7 @@ import com.zerobase.healbits.awss3.AwsS3Api;
 import com.zerobase.healbits.exception.HealBitsException;
 import com.zerobase.healbits.takechallenge.domain.TakeChallenge;
 import com.zerobase.healbits.takechallenge.repository.TakeChallengeRepository;
+import com.zerobase.healbits.type.CacheKey;
 import com.zerobase.healbits.verification.domain.Verification;
 import com.zerobase.healbits.verification.dto.VerificationDateAndImages;
 import com.zerobase.healbits.verification.dto.VerificationDto;
@@ -11,6 +12,8 @@ import com.zerobase.healbits.verification.dto.VerificationInfo;
 import com.zerobase.healbits.verification.respository.VerificationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,6 +36,7 @@ public class VerificationService {
 
     private final AwsS3Api awsS3Api;
 
+    @CacheEvict(value = CacheKey.KEY_VERIFICATION, allEntries = true)
     @Transactional
     public VerificationDto verifyChallenge(long verifiedTakeChallengeId, MultipartFile multipartFile, String email) {
         TakeChallenge takeChallenge = takeChallengeRepository.findById(verifiedTakeChallengeId)
@@ -52,6 +56,7 @@ public class VerificationService {
         );
     }
 
+    @Cacheable(value = CacheKey.KEY_VERIFICATION)
     public VerificationInfo getVerificationInfo(long takeChallengeId) {
         TakeChallenge takeChallenge = takeChallengeRepository.findById(takeChallengeId)
                 .orElseThrow(() -> new HealBitsException(TAKE_CHALLENGE_NOT_FOUND));
@@ -96,7 +101,7 @@ public class VerificationService {
         }
 
         if (LocalDate.now().isAfter(takeChallenge.getParticipatedChallenge().getEndDate())) {
-            throw new HealBitsException(CHALLENGE_FINISHED);
+            throw new HealBitsException(ALREADY_FINISHED_CHALLENGE);
         }
     }
 }

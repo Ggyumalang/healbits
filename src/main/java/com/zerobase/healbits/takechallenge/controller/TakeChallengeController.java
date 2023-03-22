@@ -1,5 +1,6 @@
 package com.zerobase.healbits.takechallenge.controller;
 
+import com.zerobase.healbits.takechallenge.dto.CompleteTookChallenge;
 import com.zerobase.healbits.takechallenge.dto.ParticipateChallenge;
 import com.zerobase.healbits.takechallenge.dto.TakeChallengeInfo;
 import com.zerobase.healbits.takechallenge.service.TakeChallengeService;
@@ -38,5 +39,14 @@ public class TakeChallengeController {
         return takeChallengeService.getTookChallengeListByChallengeStatus(
                 challengeStatus, user.getUsername()
         );
+    }
+
+    @PatchMapping("/complete")
+    public CompleteTookChallenge.Response completeTookChallenge(
+            @RequestParam long takeChallengeId,
+            @AuthenticationPrincipal User user
+    ) {
+            return takeChallengeService
+                    .completeTookChallenge(takeChallengeId , user.getUsername());
     }
 }

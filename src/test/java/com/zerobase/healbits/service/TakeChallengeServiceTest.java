@@ -6,6 +6,7 @@ import com.zerobase.healbits.exception.HealBitsException;
 import com.zerobase.healbits.member.domain.Member;
 import com.zerobase.healbits.member.repository.MemberRepository;
 import com.zerobase.healbits.takechallenge.domain.TakeChallenge;
+import com.zerobase.healbits.takechallenge.dto.CompleteTookChallenge;
 import com.zerobase.healbits.takechallenge.dto.ParticipateChallenge;
 import com.zerobase.healbits.takechallenge.dto.TakeChallengeDto;
 import com.zerobase.healbits.takechallenge.dto.TakeChallengeInfo;
@@ -14,6 +15,7 @@ import com.zerobase.healbits.takechallenge.service.TakeChallengeService;
 import com.zerobase.healbits.transaction.service.TransactionService;
 import com.zerobase.healbits.type.ChallengeCategory;
 import com.zerobase.healbits.type.ChallengeStatus;
+import com.zerobase.healbits.verification.respository.VerificationRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,6 +47,9 @@ class TakeChallengeServiceTest {
 
     @Mock
     private TransactionService transactionService;
+
+    @Mock
+    private VerificationRepository verificationRepository;
 
     @Mock
     private MemberRepository memberRepository;
@@ -389,6 +394,49 @@ class TakeChallengeServiceTest {
                         ));
         //then 이런 결과가 나온다.
         assertEquals(EMAIL_NOT_FOUND, healBitsException.getErrorCode());
+    }
+
+    @Test
+    void success_completeTookChallenge() {
+        //given 어떤 데이터가 주어졌을 때
+        Member member = Member.builder()
+                .email("khg1111@naver.com")
+                .password("1234")
+                .name("홍길")
+                .phone("01011112222")
+                .balance(2000)
+                .build();
+
+        Challenge challenge = Challenge.builder()
+                .id(1L)
+                .registeredMember(member)
+                .challengeName("challenge")
+                .challengeCategory(ChallengeCategory.HEALTH)
+                .summary("abc")
+                .contents("abcdef")
+                .participantsNum(0)
+                .startDate(LocalDate.now().minusDays(1))
+                .endDate(LocalDate.now())
+                .build();
+
+        TakeChallenge takeChallenge = TakeChallenge.builder()
+                .participatedMember(member)
+                .participatedChallenge(challenge)
+                .participationFee(1000)
+                .build();
+
+        given(takeChallengeRepository.findById(anyLong()))
+                .willReturn(Optional.ofNullable(takeChallenge));
+
+        given(memberRepository.findByEmail(anyString()))
+                .willReturn(Optional.ofNullable(member));
+
+        //when 어떤 경우에
+        CompleteTookChallenge.Response response = takeChallengeService.completeTookChallenge(1, "khg1111@naver.com");
+        //then 이런 결과가 나온다.
+        assertEquals("challenge", response.getChallengeName());
+        assertEquals(900, response.getPaybackFee());
+        assertEquals("0.00%", response.getVerificationRate());
     }
 
 }
