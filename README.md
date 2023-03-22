@@ -81,14 +81,14 @@ TakeChallenge : Verification( 1 : N )
 ---
 ## API 명세서
 
-### 1. 회원가입 API
+## 1. 회원가입 API
 
 - POST /member/register
 - 파라미터 : 이메일,  비밀번호 , 이름 , 연락처
 - 정책 : 이미 등록되어 있는 이메일이라면 실패응답
 - 성공 응답 : 이메일 , 이름
 
-#### 상세 정보
+### 상세 정보
 
 - 저장이 필요한 정보
 - 단, balance 는 다른 api에서 정보를 넣어줄 것임.
@@ -126,14 +126,14 @@ TakeChallenge : Verification( 1 : N )
     ```
     
 
-### 2. 로그인 API
+## 2. 로그인 API
 
 - POST /member/login
 - 파라미터 : 이메일,  비밀번호
 - 정책 : 등록되지 않은 이메일 , 비밀번호가 일치하지 않을 시 실패응답
 - 성공 응답 : grantType, accessToken, refreshToekn
 
-#### 상세 정보
+### 상세 정보
 
 - 요청 / 응답 구조
     - 요청
@@ -156,14 +156,14 @@ TakeChallenge : Verification( 1 : N )
     ```
     
 
-### 3. 회원정보 조회 API
+## 3. 회원정보 조회 API
 
 - GET /member/info?email={email}
 - 파라미터 : 이메일
 - 정책 : 등록되지 않은 이메일 실패응답
 - 성공 응답 : MemberInfo(이메일, 이름, 연락처, 잔액)
 
-#### 상세 정보
+### 상세 정보
 
 - 요청 / 응답 구조
     - 요청
@@ -184,6 +184,7 @@ TakeChallenge : Verification( 1 : N )
     }
     ```
     
+
 ## 4. 챌린지 등록 API
 
 - POST /challenge/register
@@ -203,7 +204,7 @@ TakeChallenge : Verification( 1 : N )
 | challengeName | String | 챌린지명 |
 | challengeCategory | String | 챌린지 카테고리 |
 | summary | String | 챌린지에 대한 요약설명 |
-| contents | String | 챌리지에 대한 설 |
+| contents | String | 챌리지에 대한 설명 |
 | participantsNum | Long | 챌린지 참여자 수 |
 | startDate | LocalDate | 챌린지 시작일자 |
 | endDate | LocalDate | 챌린지 종료일자 |
@@ -214,7 +215,7 @@ TakeChallenge : Verification( 1 : N )
     
     ```java
     {
-      "challengeName" : "challenge",
+    	"challengeName" : "challenge",
       "challengeCategory" : "HEALTH",
       "summary" : "운동",
       "contents" : "주 3회 운동하기",
@@ -238,6 +239,7 @@ TakeChallenge : Verification( 1 : N )
 - GET /challenge/list?challengeCategory={challengeCategory}
 - 파라미터 : 챌린지 카테고리명
 - 정책 : 시작날짜가 현재 날짜보다 크거나 같은 챌린지 목록을 카테고리별로 조회 가능
+          페이징 기능(Slice)을 구현
           등록되지 않은 카테고리 실패응답
 - 성공 응답 : 챌린지명, 챌린지 카테고리, 요약설명, 참가자 수, 챌린지 기간 , 시작 일까지 남은 일
 
@@ -248,29 +250,73 @@ TakeChallenge : Verification( 1 : N )
     
     ```java
     GET /challenge/list?challengeCategory={challengeCategory}
+    GET /challenge/list?challengeCategory={challengeCategory}&page={page}&size={size}&sort={sort}
     ```
     
     - 응답
     
     ```java
-    [
-        {
-            "challengeName": "취미1",
-            "challengeCategory": "HOBBY",
-            "summary": "취미:음악",
-            "participantsNum": 0,
-            "duration": 8,
-            "remainingDays": 0
+    {
+        "content": [
+            {
+                "challengeName": "식습관기르기",
+                "challengeCategory": "EATING_HABITS",
+                "summary": "약먹자",
+                "participantsNum": 0,
+                "challengeDuration": 9,
+                "remainingDaysToStart": -2
+            },
+            {
+                "challengeName": "식습관기르기",
+                "challengeCategory": "EATING_HABITS",
+                "summary": "약먹자2",
+                "participantsNum": 0,
+                "challengeDuration": 8,
+                "remainingDaysToStart": -1
+            },
+            {
+                "challengeName": "식습관기르기",
+                "challengeCategory": "EATING_HABITS",
+                "summary": "약먹자3",
+                "participantsNum": 0,
+                "challengeDuration": 3,
+                "remainingDaysToStart": 6
+            },
+            {
+                "challengeName": "알약먹기",
+                "challengeCategory": "EATING_HABITS",
+                "summary": "알약뇸",
+                "participantsNum": 0,
+                "challengeDuration": 16,
+                "remainingDaysToStart": 7
+            }
+        ],
+        "pageable": {
+            "sort": {
+                "empty": true,
+                "sorted": false,
+                "unsorted": true
+            },
+            "offset": 0,
+            "pageNumber": 0,
+            "pageSize": 10,
+            "paged": true,
+            "unpaged": false
         },
-        {
-            "challengeName": "취미2",
-            "challengeCategory": "HOBBY",
-            "summary": "취미:미술",
-            "participantsNum": 0,
-            "challengeDuration": 5,
-            "remainingDaysToStart": 3
-        }
-    ]
+        "last": true,
+        "totalElements": 4,
+        "totalPages": 1,
+        "size": 10,
+        "number": 0,
+        "sort": {
+            "empty": true,
+            "sorted": false,
+            "unsorted": true
+        },
+        "first": true,
+        "numberOfElements": 4,
+        "empty": false
+    }
     ```
     
 
@@ -308,6 +354,7 @@ TakeChallenge : Verification( 1 : N )
         "endDate": "2023-03-11"
     }
     ```
+    
 
 ## 7. 잔액 충전 API
 
@@ -333,16 +380,16 @@ TakeChallenge : Verification( 1 : N )
 | registeredDateTime | LocalDateTime | 등록일시 |
 | updatedDatetime | LocalDateTime | 수정일시 |
 - 요청 / 응답 구조
-  - 요청
-
+    - 요청
+    
     ```java
     {
         "chargeAmount" : 700
     }
     ```
-
-  - 응답
-
+    
+    - 응답
+    
     ```java
     {
         "email": "khg2154@gmail.com",
@@ -352,7 +399,7 @@ TakeChallenge : Verification( 1 : N )
         "balanceSnapshot": 1050
     }
     ```
-
+    
 
 ## 8. 챌린지 참여 API
 
@@ -391,34 +438,13 @@ TakeChallenge : Verification( 1 : N )
 | id | pk
 (Long) | primary key |
 | member | Member | 회원테이블과 거래 테이블은 1:N 관계이다. |
-| transactionType | String | 거래타입 (사용 , 충전) |
+| transactionType | String | 거래타입 (사용 , 충전,  환급) |
 | transactionResultType | String | 거래결과타입 (성공,실패) |
 | transactionId | String | 거래Id |
 | amount | long | 거래금액 |
 | balanceSnapshot | long | 거래 후 잔액 |
 | registeredDateTime | LocalDateTime | 등록일시 |
 | updatedDatetime | LocalDateTime | 수정일시 |
-- 요청 / 응답 구조
-  - 요청
-
-    ```java
-    {
-        "participationFee" : 50,
-    		"email" : "abcd@1234"
-    }
-    ```
-
-  - 응답
-
-    ```java
-    {
-        "email": "abcd@gmail.com",
-        "challengeName": "challenge",
-        "participationFee": 50,
-        "balance": 450
-    }
-    ```
-
 
 ## 9. 참여 챌린지 조회API
 
@@ -427,14 +453,14 @@ TakeChallenge : Verification( 1 : N )
 - 정책 :  참여 챌린지의 상태 ( 시작 전 , 진행 중 , 종료 ) 에 따른 조회 , 등록되지 않은 회원이거나 , challengeStatus가 등록되지 않은 값이 들어오면 실패 응답
 - 성공 응답 : 챌린지명 ,  챌린지 요약 설명  , 챌린지 시작 일자, 종료 일자
 - 요청 / 응답 구조
-  - 요청
-
+    - 요청
+    
     ```java
     GET /take-challenge?challengeStatus={challengeStatus}
     ```
-
-  - 응답
-
+    
+    - 응답
+    
     ```java
     [
         {
@@ -445,7 +471,7 @@ TakeChallenge : Verification( 1 : N )
         }
     ]
     ```
-
+    
 
 ## 10. 챌린지 인증 API
 
@@ -468,14 +494,14 @@ TakeChallenge : Verification( 1 : N )
 | registeredDateTime | LocalDateTime | 등록일시 |
 | updatedDatetime | LocalDateTime | 수정일시 |
 - 요청 / 응답 구조
-  - 요청
-
+    - 요청
+    
     ```java
     form-data형식 : verifiedTakeChallengeId, 이미지파일
     ```
-
-  - 응답
-
+    
+    - 응답
+    
     ```java
     {
         "email": "abc2154@gmail.com",
@@ -484,7 +510,7 @@ TakeChallenge : Verification( 1 : N )
         "imagePath": "HOBBY/독서하기/abc2154@gmail.com/729bdb348b264f7983db8aeaeb89cdf0_20230317.jpg"
     }
     ```
-
+    
 
 ## 11. 챌린지 인증 조회API
 
@@ -493,14 +519,14 @@ TakeChallenge : Verification( 1 : N )
 - 정책 :  해당 챌린지에 참여한 적이 없는 경우 실패 응답
 - 성공 응답 : 이메일 , 챌린지명 , 참가비 , 잔액
 - 요청 / 응답 구조
-  - 요청
-
+    - 요청
+    
     ```java
     GET /verification?verifiedTakeChallengeId={verifiedTakeChallengeId}
     ```
-
-  - 응답
-
+    
+    - 응답
+    
     ```java
     {
         "dateAndImagesList": [
@@ -514,6 +540,60 @@ TakeChallenge : Verification( 1 : N )
         "verificationRate": "12.50%"
     }
     ```
+    
+
+## 12. 챌린지 완료하기 API
+
+- PATCH /take-challenge/complete?takeChallengeId={takeChallengeId}
+- 파라미터 : takeChallengeId
+- 정책 :  챌린지를 완료하는 서비스로 인증률에 따라서 이전에 낸 참가비를 기준으로 돌려준다. 
+            100%  시 참가비의 105% 반환
+            80% 이상 시 참가비의 100% 반환
+            80% 미만 시 참가비의 90% 반환
+            아직 챌린지가 종료된 상태가 아닌 경우, 이미 완료를 한 경우 , 유효하지 않은 인증률이     
+            계산되는 경우 , 유효하지 않은 지급액이 나올 경우 실패응답
+- 성공 응답 : 챌린지명 , 인증률 , 환급액
+- 요청 / 응답 구조
+    - 요청
+    
+    ```java
+    GET /verification?verifiedTakeChallengeId={verifiedTakeChallengeId}
+    ```
+    
+    - 응답
+    
+    ```java
+    {
+        "challengeName": "challenge",
+        "verificationRate": "100.00%",
+        "paybackFee": 1050
+    }
+    ```
+    
+
+## 12-1. PayBack 서비스
+
+- 챌린지 완료하기 내에서 사용되는 payback 서비스
+- 파라미터 : 환급액 , 회원 정보
+- 정책 :  등록되지 않은 이메일인 경우 , 참가비가 0이하인 경우,  회원의 잔액보다 참가비가 높은 경우 실패 응답도 transaction 테이블에 거래 실패로 저장
+- 성공 응답 : 이메일 , 거래결과타입 , 거래Id , 참가비, 잔액
+
+### 상세 정보
+
+- 저장이 필요한 정보(Transaction Table)
+
+| 컬럼명 | 데이터 타입 | 설명 |
+| --- | --- | --- |
+| id | pk
+(Long) | primary key |
+| member | Member | 회원테이블과 거래 테이블은 1:N 관계이다. |
+| transactionType | String | 거래타입 (사용 , 충전,  환급) |
+| transactionResultType | String | 거래결과타입 (성공,실패) |
+| transactionId | String | 거래Id |
+| amount | long | 거래금액 |
+| balanceSnapshot | long | 거래 후 잔액 |
+| registeredDateTime | LocalDateTime | 등록일시 |
+| updatedDatetime | LocalDateTime | 수정일시 |
 ---
 ## 사용 기술스택
 
@@ -524,4 +604,6 @@ TakeChallenge : Verification( 1 : N )
 - Spring Batch
 - Spring Security
 - redis
+- AWS S3
+- Validation
 - jwt
