@@ -2,6 +2,7 @@ package com.zerobase.healbits.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zerobase.healbits.takechallenge.controller.TakeChallengeController;
+import com.zerobase.healbits.takechallenge.dto.CompleteTookChallenge;
 import com.zerobase.healbits.takechallenge.dto.ParticipateChallenge;
 import com.zerobase.healbits.takechallenge.dto.TakeChallengeDto;
 import com.zerobase.healbits.takechallenge.dto.TakeChallengeInfo;
@@ -17,12 +18,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -85,6 +84,28 @@ class TakeChallengeControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].challengeName").value("challenge"))
                 .andExpect(jsonPath("$[0].summary").value("test"));
+
+    }
+
+    @Test
+    @WithMockUser
+    void success_completeTookChallenge() throws Exception {
+        //given 어떤 데이터가 주어졌을 때
+        given(takeChallengeService.completeTookChallenge(anyLong(), anyString()))
+                .willReturn(CompleteTookChallenge.Response.builder()
+                        .paybackFee(100)
+                        .verificationRate("50.00%")
+                        .challengeName("challenge")
+                        .build());
+        //when 어떤 경우에
+        //then 이런 결과가 나온다.
+        mockMvc.perform(patch("/take-challenge/complete?takeChallengeId=1")
+                        .with(csrf()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.paybackFee").value(100))
+                .andExpect(jsonPath("$.challengeName").value("challenge"))
+                .andExpect(jsonPath("$.verificationRate").value("50.00%"));
 
     }
 }

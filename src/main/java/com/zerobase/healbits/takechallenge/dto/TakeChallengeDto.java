@@ -17,7 +17,6 @@ public class TakeChallengeDto {
 
     private long participationFee;
 
-
     public static TakeChallengeDto fromEntity(TakeChallenge takeChallenge) {
         return TakeChallengeDto.builder()
                 .email(takeChallenge.getParticipatedMember().getEmail())

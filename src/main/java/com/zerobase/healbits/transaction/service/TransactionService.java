@@ -22,8 +22,7 @@ import java.util.UUID;
 import static com.zerobase.healbits.type.ErrorCode.EMAIL_NOT_FOUND;
 import static com.zerobase.healbits.type.TransactionResultType.FAIL;
 import static com.zerobase.healbits.type.TransactionResultType.SUCCESS;
-import static com.zerobase.healbits.type.TransactionType.CHARGE;
-import static com.zerobase.healbits.type.TransactionType.USE;
+import static com.zerobase.healbits.type.TransactionType.*;
 
 @Slf4j
 @Service
@@ -51,6 +50,21 @@ public class TransactionService {
                 .orElseThrow(() -> new HealBitsException(EMAIL_NOT_FOUND));
 
         saveAndGetTransaction(request.getParticipationFee(), member, USE, FAIL);
+    }
+
+    @Transactional
+    public TransactionDto paybackBalance(long paybackFee, Member member) {
+
+        member.chargeBalance(paybackFee);
+
+        return TransactionDto.fromEntity(
+                saveAndGetTransaction(paybackFee, member, PAYBACK, SUCCESS)
+        );
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void saveFailedPaybackBalance(long paybackFee, Member member) {
+        saveAndGetTransaction(paybackFee, member, PAYBACK, FAIL);
     }
 
     @Transactional
