@@ -15,6 +15,7 @@ import com.zerobase.healbits.transaction.dto.TransactionDto;
 import com.zerobase.healbits.transaction.dto.UseBalance;
 import com.zerobase.healbits.transaction.service.TransactionService;
 import com.zerobase.healbits.type.ChallengeStatus;
+import com.zerobase.healbits.type.PaybackPercentagePolicy;
 import com.zerobase.healbits.verification.domain.Verification;
 import com.zerobase.healbits.verification.respository.VerificationRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,6 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.zerobase.healbits.type.ErrorCode.*;
-import static com.zerobase.healbits.type.PaybackPolicy.*;
 
 @Slf4j
 @Service
@@ -147,7 +147,6 @@ public class TakeChallengeService {
         validateCompleteTookChallenge(takeChallenge, verificationRate, paybackFee);
 
         paybackBalance(paybackFee, member);
-        takeChallenge.completeTookChallenge();
 
         return CompleteTookChallenge.Response.builder()
                 .challengeName(takeChallenge.getParticipatedChallenge().getChallengeName())
@@ -165,7 +164,7 @@ public class TakeChallengeService {
             throw new HealBitsException(CHALLENGE_NOT_FINISHED);
         }
 
-        if (takeChallenge.getParticipationFee() == -1) {
+        if (LocalDate.now().isAfter(takeChallenge.getParticipatedChallenge().getEndDate())) {
             throw new HealBitsException(ALREADY_COMPLETED_CHALLENGE);
         }
 
@@ -191,13 +190,13 @@ public class TakeChallengeService {
     private static long getPaybackFee(TakeChallenge takeChallenge, int verificationRate) {
         long paybackFee = 0;
 
-        if (verificationRate == PERFECT) {
+        if (verificationRate == PaybackPercentagePolicy.PERFECT) {
             paybackFee = (long) (takeChallenge.getParticipationFee()
-                    + takeChallenge.getParticipationFee() * PAYBACK_PERFECT);
-        } else if (verificationRate >= EXCELLENT) {
+                    + takeChallenge.getParticipationFee() * PaybackPercentagePolicy.PAYBACK_PERFECT);
+        } else if (verificationRate >= PaybackPercentagePolicy.EXCELLENT) {
             paybackFee = takeChallenge.getParticipationFee();
         } else {
-            paybackFee = (long) (takeChallenge.getParticipationFee() * PAYBACK_BAD);
+            paybackFee = (long) (takeChallenge.getParticipationFee() * PaybackPercentagePolicy.PAYBACK_BAD);
         }
 
         return paybackFee;
