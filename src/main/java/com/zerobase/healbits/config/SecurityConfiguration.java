@@ -8,7 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,7 +38,8 @@ public class SecurityConfiguration {
                 .antMatchers("/member/login",
                         "/member/register",
                         "/challenge/list",
-                        "/challenge/detail"
+                        "/challenge/detail",
+                        "/swagger-resources/**"
                 ).permitAll() //해당 API에 대해서는 모든 요청을 허가한다는 설정이다.
                 .anyRequest().hasRole("USER"); //이 밖의 모든 요청은 USER 권한이 있어야 요청할 수 있다는 설정이다.
 
@@ -50,6 +53,12 @@ public class SecurityConfiguration {
         return httpSecurity.build();
     }
 
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().antMatchers("/v2/api-docs",  "/configuration/ui",
+                "/swagger-resources", "/configuration/security",
+                "/swagger-ui.html", "/webjars/**","/swagger/**");
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
