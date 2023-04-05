@@ -6,7 +6,7 @@ import com.zerobase.healbits.challenge.dto.ChallengeDto;
 import com.zerobase.healbits.challenge.dto.ChallengeSummaryInfo;
 import com.zerobase.healbits.challenge.dto.RegisterChallenge;
 import com.zerobase.healbits.challenge.service.ChallengeService;
-import com.zerobase.healbits.type.ChallengeCategory;
+import com.zerobase.healbits.common.type.ChallengeCategory;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

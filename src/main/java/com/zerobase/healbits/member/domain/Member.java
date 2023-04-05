@@ -1,13 +1,13 @@
 package com.zerobase.healbits.member.domain;
 
-import com.zerobase.healbits.domain.BaseEntity;
-import com.zerobase.healbits.exception.HealBitsException;
+import com.zerobase.healbits.common.domain.BaseEntity;
+import com.zerobase.healbits.common.exception.HealBitsException;
 import lombok.*;
 
 import javax.persistence.*;
 
-import static com.zerobase.healbits.type.ErrorCode.AMOUNT_EXCEED_BALANCE;
-import static com.zerobase.healbits.type.ErrorCode.INVALID_AMOUNT;
+import static com.zerobase.healbits.common.type.ErrorCode.AMOUNT_EXCEED_BALANCE;
+import static com.zerobase.healbits.common.type.ErrorCode.INVALID_AMOUNT;
 
 @Getter
 @Setter

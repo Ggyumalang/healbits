@@ -1,4 +1,4 @@
-package com.zerobase.healbits.type;
+package com.zerobase.healbits.common.type;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

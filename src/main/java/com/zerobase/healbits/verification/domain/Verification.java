@@ -1,6 +1,6 @@
 package com.zerobase.healbits.verification.domain;
 
-import com.zerobase.healbits.domain.BaseEntity;
+import com.zerobase.healbits.common.domain.BaseEntity;
 import com.zerobase.healbits.takechallenge.domain.TakeChallenge;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

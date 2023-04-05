@@ -1,6 +1,6 @@
 package com.zerobase.healbits.transaction.service;
 
-import com.zerobase.healbits.exception.HealBitsException;
+import com.zerobase.healbits.common.exception.HealBitsException;
 import com.zerobase.healbits.member.domain.Member;
 import com.zerobase.healbits.member.repository.MemberRepository;
 import com.zerobase.healbits.transaction.domain.Transaction;
@@ -8,8 +8,8 @@ import com.zerobase.healbits.transaction.dto.ChargeBalance;
 import com.zerobase.healbits.transaction.dto.TransactionDto;
 import com.zerobase.healbits.transaction.dto.UseBalance;
 import com.zerobase.healbits.transaction.repository.TransactionRepository;
-import com.zerobase.healbits.type.TransactionResultType;
-import com.zerobase.healbits.type.TransactionType;
+import com.zerobase.healbits.common.type.TransactionResultType;
+import com.zerobase.healbits.common.type.TransactionType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,7 +22,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static com.zerobase.healbits.type.ErrorCode.EMAIL_NOT_FOUND;
+import static com.zerobase.healbits.common.type.ErrorCode.EMAIL_NOT_FOUND;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;

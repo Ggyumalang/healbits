@@ -1,16 +1,21 @@
 package com.zerobase.healbits.takechallenge.controller;
 
+import com.zerobase.healbits.common.type.ChallengeStatus;
 import com.zerobase.healbits.takechallenge.dto.CompleteTookChallenge;
 import com.zerobase.healbits.takechallenge.dto.ParticipateChallenge;
 import com.zerobase.healbits.takechallenge.dto.TakeChallengeInfo;
 import com.zerobase.healbits.takechallenge.service.TakeChallengeService;
-import com.zerobase.healbits.type.ChallengeStatus;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,32 +26,32 @@ public class TakeChallengeController {
 
     @PostMapping("/participate")
     public ParticipateChallenge.Response participateChallenge(
-            @RequestBody ParticipateChallenge.Request request,
-            @AuthenticationPrincipal User user
+        @RequestBody ParticipateChallenge.Request request,
+        @AuthenticationPrincipal User user
     ) {
         return ParticipateChallenge.Response.from(
-                takeChallengeService.participateChallenge(
-                        request, user.getUsername()
-                )
+            takeChallengeService.participateChallenge(
+                request, user.getUsername()
+            )
         );
     }
 
     @GetMapping("/info")
     public List<TakeChallengeInfo> getTookChallengeInfoByChallengeStatus(
-            @RequestParam ChallengeStatus challengeStatus,
-            @AuthenticationPrincipal User user
+        @RequestParam ChallengeStatus challengeStatus,
+        @AuthenticationPrincipal User user
     ) {
         return takeChallengeService.getTookChallengeListByChallengeStatus(
-                challengeStatus, user.getUsername()
+            challengeStatus, user.getUsername()
         );
     }
 
     @PatchMapping("/complete")
     public CompleteTookChallenge.Response completeTookChallenge(
-            @RequestParam long takeChallengeId,
-            @AuthenticationPrincipal User user
+        @RequestParam long takeChallengeId,
+        @AuthenticationPrincipal User user
     ) {
-            return takeChallengeService
-                    .completeTookChallenge(takeChallengeId , user.getUsername());
+        return takeChallengeService
+            .completeTookChallenge(takeChallengeId, user.getUsername());
     }
 }

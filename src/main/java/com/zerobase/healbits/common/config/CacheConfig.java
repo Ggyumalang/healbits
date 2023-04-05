@@ -1,5 +1,6 @@
-package com.zerobase.healbits.config;
+package com.zerobase.healbits.common.config;
 
+import java.time.Duration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
@@ -14,8 +15,6 @@ import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSeriali
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
-import java.time.Duration;
-
 @Configuration
 @RequiredArgsConstructor
 public class CacheConfig {
@@ -27,16 +26,21 @@ public class CacheConfig {
     private int port;
 
     @Bean
-    public CacheManager redisCacheManager(RedisConnectionFactory redisConnectionFactory) {
+    public CacheManager redisCacheManager(
+        RedisConnectionFactory redisConnectionFactory) {
         RedisCacheConfiguration conf = RedisCacheConfiguration.defaultCacheConfig()
-                .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
-                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()))
-                .entryTtl(Duration.ofDays(3));
+            .serializeKeysWith(
+                RedisSerializationContext.SerializationPair.fromSerializer(
+                    new StringRedisSerializer()))
+            .serializeValuesWith(
+                RedisSerializationContext.SerializationPair.fromSerializer(
+                    new GenericJackson2JsonRedisSerializer()))
+            .entryTtl(Duration.ofDays(3));
 
         return RedisCacheManager.RedisCacheManagerBuilder
-                .fromConnectionFactory(redisConnectionFactory())
-                .cacheDefaults(conf)
-                .build();
+            .fromConnectionFactory(redisConnectionFactory())
+            .cacheDefaults(conf)
+            .build();
     }
 
     @Bean

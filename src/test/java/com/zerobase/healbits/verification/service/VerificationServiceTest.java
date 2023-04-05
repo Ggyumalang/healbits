@@ -3,11 +3,11 @@ package com.zerobase.healbits.verification.service;
 
 import com.zerobase.healbits.awss3.AwsS3Api;
 import com.zerobase.healbits.challenge.domain.Challenge;
-import com.zerobase.healbits.exception.HealBitsException;
+import com.zerobase.healbits.common.exception.HealBitsException;
 import com.zerobase.healbits.member.domain.Member;
 import com.zerobase.healbits.takechallenge.domain.TakeChallenge;
 import com.zerobase.healbits.takechallenge.repository.TakeChallengeRepository;
-import com.zerobase.healbits.type.ChallengeCategory;
+import com.zerobase.healbits.common.type.ChallengeCategory;
 import com.zerobase.healbits.verification.domain.Verification;
 import com.zerobase.healbits.verification.dto.VerificationDto;
 import com.zerobase.healbits.verification.dto.VerificationInfo;
@@ -25,7 +25,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import static com.zerobase.healbits.type.ErrorCode.*;
+import static com.zerobase.healbits.common.type.ErrorCode.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;

@@ -3,7 +3,7 @@ package com.zerobase.healbits.member.controller;
 import com.zerobase.healbits.member.dto.LoginMember;
 import com.zerobase.healbits.member.dto.MemberInfo;
 import com.zerobase.healbits.member.dto.RegisterMember;
-import com.zerobase.healbits.dto.TokenInfo;
+import com.zerobase.healbits.common.dto.TokenInfo;
 import com.zerobase.healbits.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

@@ -1,10 +1,10 @@
 package com.zerobase.healbits.verification.service;
 
 import com.zerobase.healbits.awss3.AwsS3Api;
-import com.zerobase.healbits.exception.HealBitsException;
+import com.zerobase.healbits.common.exception.HealBitsException;
 import com.zerobase.healbits.takechallenge.domain.TakeChallenge;
 import com.zerobase.healbits.takechallenge.repository.TakeChallengeRepository;
-import com.zerobase.healbits.type.CacheKey;
+import com.zerobase.healbits.common.type.CacheKey;
 import com.zerobase.healbits.verification.domain.Verification;
 import com.zerobase.healbits.verification.dto.VerificationDateAndImages;
 import com.zerobase.healbits.verification.dto.VerificationDto;
@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static com.zerobase.healbits.type.ErrorCode.*;
+import static com.zerobase.healbits.common.type.ErrorCode.*;
 
 @Slf4j
 @Service
@@ -63,7 +63,7 @@ public class VerificationService {
 
         List<Verification> verificationList = verificationRepository.findAllByVerifiedTakeChallengeId(takeChallengeId);
         List<VerificationDateAndImages> dateAndImagesList = verificationList.stream()
-                .map(x -> VerificationDateAndImages.fromEntity(x, awsS3Api))
+                .map(x -> VerificationDateAndImages.fromEntity(x, awsS3Api.getImageUrl(x.getImagePath())))
                 .collect(Collectors.toList());
 
         VerificationInfo verificationInfo = new VerificationInfo();

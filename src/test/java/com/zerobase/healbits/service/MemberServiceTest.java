@@ -1,6 +1,6 @@
 package com.zerobase.healbits.service;
 
-import com.zerobase.healbits.exception.HealBitsException;
+import com.zerobase.healbits.common.exception.HealBitsException;
 import com.zerobase.healbits.member.domain.Member;
 import com.zerobase.healbits.member.dto.MemberDto;
 import com.zerobase.healbits.member.dto.MemberInfo;
@@ -20,7 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
-import static com.zerobase.healbits.type.ErrorCode.EMAIL_ALREADY_EXIST;
+import static com.zerobase.healbits.common.type.ErrorCode.EMAIL_ALREADY_EXIST;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
