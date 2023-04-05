@@ -2,7 +2,7 @@ package com.zerobase.healbits.service;
 
 import com.zerobase.healbits.challenge.domain.Challenge;
 import com.zerobase.healbits.challenge.repository.ChallengeRepository;
-import com.zerobase.healbits.exception.HealBitsException;
+import com.zerobase.healbits.common.exception.HealBitsException;
 import com.zerobase.healbits.member.domain.Member;
 import com.zerobase.healbits.member.repository.MemberRepository;
 import com.zerobase.healbits.takechallenge.domain.TakeChallenge;
@@ -13,8 +13,8 @@ import com.zerobase.healbits.takechallenge.dto.TakeChallengeInfo;
 import com.zerobase.healbits.takechallenge.repository.TakeChallengeRepository;
 import com.zerobase.healbits.takechallenge.service.TakeChallengeService;
 import com.zerobase.healbits.transaction.service.TransactionService;
-import com.zerobase.healbits.type.ChallengeCategory;
-import com.zerobase.healbits.type.ChallengeStatus;
+import com.zerobase.healbits.common.type.ChallengeCategory;
+import com.zerobase.healbits.common.type.ChallengeStatus;
 import com.zerobase.healbits.verification.respository.VerificationRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,7 +28,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import static com.zerobase.healbits.type.ErrorCode.*;
+import static com.zerobase.healbits.common.type.ErrorCode.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.*;

@@ -1,8 +1,6 @@
-package com.zerobase.healbits.type;
+package com.zerobase.healbits.common.type;
 
-import com.zerobase.healbits.exception.HealBitsException;
-
-import static com.zerobase.healbits.type.ErrorCode.CHALLENGE_CATEGORY_NOT_FOUND;
+import com.zerobase.healbits.common.exception.HealBitsException;
 
 public enum ChallengeCategory {
     HEALTH,
@@ -14,7 +12,7 @@ public enum ChallengeCategory {
         try {
             return ChallengeCategory.valueOf(challengeCategory);
         } catch (IllegalArgumentException e) {
-            throw new HealBitsException(CHALLENGE_CATEGORY_NOT_FOUND);
+            throw new HealBitsException(ErrorCode.CHALLENGE_CATEGORY_NOT_FOUND);
         }
     }
 }

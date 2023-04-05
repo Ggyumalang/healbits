@@ -1,6 +1,6 @@
 package com.zerobase.healbits.transaction.dto;
 
-import com.zerobase.healbits.type.TransactionResultType;
+import com.zerobase.healbits.common.type.TransactionResultType;
 import lombok.*;
 
 import javax.validation.constraints.Max;

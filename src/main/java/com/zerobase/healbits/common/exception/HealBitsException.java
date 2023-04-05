@@ -1,6 +1,6 @@
-package com.zerobase.healbits.exception;
+package com.zerobase.healbits.common.exception;
 
-import com.zerobase.healbits.type.ErrorCode;
+import com.zerobase.healbits.common.type.ErrorCode;
 import lombok.*;
 
 @Getter

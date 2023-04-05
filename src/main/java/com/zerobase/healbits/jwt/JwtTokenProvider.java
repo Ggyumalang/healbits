@@ -1,6 +1,6 @@
 package com.zerobase.healbits.jwt;
 
-import com.zerobase.healbits.dto.TokenInfo;
+import com.zerobase.healbits.common.dto.TokenInfo;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;

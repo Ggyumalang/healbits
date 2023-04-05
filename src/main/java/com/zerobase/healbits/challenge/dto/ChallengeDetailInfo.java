@@ -1,7 +1,7 @@
 package com.zerobase.healbits.challenge.dto;
 
-import com.zerobase.healbits.type.ChallengeCategory;
-import com.zerobase.healbits.type.ChallengeStatus;
+import com.zerobase.healbits.common.type.ChallengeCategory;
+import com.zerobase.healbits.common.type.ChallengeStatus;
 import lombok.*;
 
 import java.time.LocalDate;

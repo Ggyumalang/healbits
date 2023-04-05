@@ -1,4 +1,4 @@
-package com.zerobase.healbits.dto;
+package com.zerobase.healbits.common.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

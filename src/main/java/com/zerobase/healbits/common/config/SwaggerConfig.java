@@ -1,4 +1,4 @@
-package com.zerobase.healbits.config;
+package com.zerobase.healbits.common.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -2,7 +2,7 @@ package com.zerobase.healbits.takechallenge.service;
 
 import com.zerobase.healbits.challenge.domain.Challenge;
 import com.zerobase.healbits.challenge.repository.ChallengeRepository;
-import com.zerobase.healbits.exception.HealBitsException;
+import com.zerobase.healbits.common.exception.HealBitsException;
 import com.zerobase.healbits.member.domain.Member;
 import com.zerobase.healbits.member.repository.MemberRepository;
 import com.zerobase.healbits.takechallenge.domain.TakeChallenge;
@@ -14,8 +14,8 @@ import com.zerobase.healbits.takechallenge.repository.TakeChallengeRepository;
 import com.zerobase.healbits.transaction.dto.TransactionDto;
 import com.zerobase.healbits.transaction.dto.UseBalance;
 import com.zerobase.healbits.transaction.service.TransactionService;
-import com.zerobase.healbits.type.ChallengeStatus;
-import com.zerobase.healbits.type.PaybackPercentagePolicy;
+import com.zerobase.healbits.common.type.ChallengeStatus;
+import com.zerobase.healbits.common.type.PaybackPercentagePolicy;
 import com.zerobase.healbits.verification.domain.Verification;
 import com.zerobase.healbits.verification.respository.VerificationRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ import java.time.Period;
 import java.util.List;
 import java.util.Objects;
 
-import static com.zerobase.healbits.type.ErrorCode.*;
+import static com.zerobase.healbits.common.type.ErrorCode.*;
 
 @Slf4j
 @Service

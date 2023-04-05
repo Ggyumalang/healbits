@@ -1,7 +1,7 @@
 package com.zerobase.healbits.member.service;
 
-import com.zerobase.healbits.dto.TokenInfo;
-import com.zerobase.healbits.exception.HealBitsException;
+import com.zerobase.healbits.common.dto.TokenInfo;
+import com.zerobase.healbits.common.exception.HealBitsException;
 import com.zerobase.healbits.jwt.JwtTokenProvider;
 import com.zerobase.healbits.member.domain.Member;
 import com.zerobase.healbits.member.dto.MemberDto;
@@ -27,7 +27,7 @@ import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.zerobase.healbits.type.ErrorCode.*;
+import static com.zerobase.healbits.common.type.ErrorCode.*;
 
 @Slf4j
 @Service

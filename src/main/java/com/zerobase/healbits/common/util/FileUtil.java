@@ -1,13 +1,12 @@
-package com.zerobase.healbits.util;
+package com.zerobase.healbits.common.util;
 
-import com.zerobase.healbits.exception.HealBitsException;
-import com.zerobase.healbits.type.ChallengeCategory;
+import com.zerobase.healbits.common.exception.HealBitsException;
+import com.zerobase.healbits.common.type.ErrorCode;
+import com.zerobase.healbits.common.type.ChallengeCategory;
 import lombok.experimental.UtilityClass;
 
 import java.time.LocalDate;
 import java.util.UUID;
-
-import static com.zerobase.healbits.type.ErrorCode.INVALID_FILE_FORMAT;
 
 @UtilityClass
 public class FileUtil {
@@ -27,7 +26,7 @@ public class FileUtil {
         try {
             return fileName.substring(fileName.lastIndexOf(FILE_EXTENSION_SEPARATOR));
         } catch (Exception e) {
-            throw new HealBitsException(INVALID_FILE_FORMAT);
+            throw new HealBitsException(ErrorCode.INVALID_FILE_FORMAT);
         }
     }
 

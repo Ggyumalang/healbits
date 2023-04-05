@@ -1,6 +1,6 @@
 package com.zerobase.healbits.member.dto;
 
-import com.zerobase.healbits.validator.PhoneNumCheck;
+import com.zerobase.healbits.common.validator.PhoneNumCheck;
 import lombok.*;
 
 import javax.validation.constraints.Email;

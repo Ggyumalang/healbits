@@ -1,4 +1,4 @@
-package com.zerobase.healbits.config;
+package com.zerobase.healbits.common.config;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -21,11 +21,12 @@ public class AwsS3Config {
 
     @Bean
     public AmazonS3Client amazonS3Client() {
-        BasicAWSCredentials awsCredits = new BasicAWSCredentials(accessKey, secretKey);
+        BasicAWSCredentials awsCredits = new BasicAWSCredentials(accessKey,
+            secretKey);
         return (AmazonS3Client) AmazonS3ClientBuilder.standard()
-                .withRegion(region)
-                .withCredentials(new AWSStaticCredentialsProvider(awsCredits))
-                .build();
+            .withRegion(region)
+            .withCredentials(new AWSStaticCredentialsProvider(awsCredits))
+            .build();
     }
 
 }

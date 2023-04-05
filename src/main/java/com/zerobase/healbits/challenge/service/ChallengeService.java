@@ -5,10 +5,10 @@ import com.zerobase.healbits.member.domain.Member;
 import com.zerobase.healbits.challenge.dto.ChallengeDto;
 import com.zerobase.healbits.challenge.dto.ChallengeSummaryInfo;
 import com.zerobase.healbits.challenge.dto.RegisterChallenge;
-import com.zerobase.healbits.exception.HealBitsException;
+import com.zerobase.healbits.common.exception.HealBitsException;
 import com.zerobase.healbits.challenge.repository.ChallengeRepository;
 import com.zerobase.healbits.member.repository.MemberRepository;
-import com.zerobase.healbits.type.ChallengeCategory;
+import com.zerobase.healbits.common.type.ChallengeCategory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 
-import static com.zerobase.healbits.type.ErrorCode.*;
+import static com.zerobase.healbits.common.type.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor

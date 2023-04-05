@@ -1,4 +1,4 @@
-package com.zerobase.healbits.validator;
+package com.zerobase.healbits.common.validator;
 
 import javax.validation.Constraint;
 import java.lang.annotation.ElementType;

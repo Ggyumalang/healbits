@@ -1,4 +1,4 @@
-package com.zerobase.healbits.domain;
+package com.zerobase.healbits.common.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
