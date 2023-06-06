@@ -22,7 +22,7 @@ public class QTakeChallenge extends EntityPathBase<TakeChallenge> {
 
     public static final QTakeChallenge takeChallenge = new QTakeChallenge("takeChallenge");
 
-    public final com.zerobase.healbits.domain.QBaseEntity _super = new com.zerobase.healbits.domain.QBaseEntity(this);
+    public final com.zerobase.healbits.common.domain.QBaseEntity _super = new com.zerobase.healbits.common.domain.QBaseEntity(this);
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 

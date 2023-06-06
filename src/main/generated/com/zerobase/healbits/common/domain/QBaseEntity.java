@@ -1,11 +1,10 @@
-package com.zerobase.healbits.domain;
+package com.zerobase.healbits.common.domain;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
 import com.querydsl.core.types.dsl.*;
 
 import com.querydsl.core.types.PathMetadata;
-import com.zerobase.healbits.common.domain.BaseEntity;
 import javax.annotation.Generated;
 import com.querydsl.core.types.Path;
 
@@ -16,7 +15,7 @@ import com.querydsl.core.types.Path;
 @Generated("com.querydsl.codegen.DefaultSupertypeSerializer")
 public class QBaseEntity extends EntityPathBase<BaseEntity> {
 
-    private static final long serialVersionUID = -952050106L;
+    private static final long serialVersionUID = 927944371L;
 
     public static final QBaseEntity baseEntity = new QBaseEntity("baseEntity");
 

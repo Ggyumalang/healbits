@@ -19,7 +19,7 @@ public class QMember extends EntityPathBase<Member> {
 
     public static final QMember member = new QMember("member1");
 
-    public final com.zerobase.healbits.domain.QBaseEntity _super = new com.zerobase.healbits.domain.QBaseEntity(this);
+    public final com.zerobase.healbits.common.domain.QBaseEntity _super = new com.zerobase.healbits.common.domain.QBaseEntity(this);
 
     public final NumberPath<Long> balance = createNumber("balance", Long.class);
 

@@ -65,7 +65,7 @@ class ChallengeControllerTest {
                         .content(objectMapper.writeValueAsString(
                                 new RegisterChallenge.Request(
                                         "chall",
-                                        "LIFE",
+                                        ChallengeCategory.LIFE,
                                         "요약입니다",
                                         "내용입니다",
                                         LocalDate.now(),
@@ -107,7 +107,7 @@ class ChallengeControllerTest {
                         .build());
 
         Slice<ChallengeSummaryInfo> pageList = new SliceImpl<>(challengeSummaryInfoList, pageable, false);
-        given(challengeService.getChallengeListByCategory(anyString(), any()))
+        given(challengeService.getChallengeListByCategory(any(), any()))
                 .willReturn(pageList);
         //when 어떤 경우에
         //then 이런 결과가 나온다.

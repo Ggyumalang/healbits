@@ -1,5 +1,6 @@
 package com.zerobase.healbits.challenge.dto;
 
+import com.zerobase.healbits.common.type.ChallengeCategory;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -18,8 +19,7 @@ public class RegisterChallenge {
         @NotBlank
         private String challengeName;
 
-        @NotBlank
-        private String challengeCategory;
+        private ChallengeCategory challengeCategory;
 
         private String summary;
 

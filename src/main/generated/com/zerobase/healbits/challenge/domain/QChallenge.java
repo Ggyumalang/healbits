@@ -5,7 +5,6 @@ import static com.querydsl.core.types.PathMetadataFactory.*;
 import com.querydsl.core.types.dsl.*;
 
 import com.querydsl.core.types.PathMetadata;
-import com.zerobase.healbits.common.type.ChallengeCategory;
 import javax.annotation.Generated;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.PathInits;
@@ -23,9 +22,9 @@ public class QChallenge extends EntityPathBase<Challenge> {
 
     public static final QChallenge challenge = new QChallenge("challenge");
 
-    public final com.zerobase.healbits.domain.QBaseEntity _super = new com.zerobase.healbits.domain.QBaseEntity(this);
+    public final com.zerobase.healbits.common.domain.QBaseEntity _super = new com.zerobase.healbits.common.domain.QBaseEntity(this);
 
-    public final EnumPath<ChallengeCategory> challengeCategory = createEnum("challengeCategory", ChallengeCategory.class);
+    public final EnumPath<com.zerobase.healbits.common.type.ChallengeCategory> challengeCategory = createEnum("challengeCategory", com.zerobase.healbits.common.type.ChallengeCategory.class);
 
     public final StringPath challengeName = createString("challengeName");
 

@@ -39,11 +39,11 @@ public class ChallengeService {
     }
 
     public Slice<ChallengeSummaryInfo> getChallengeListByCategory(
-            String challengeCategory
+            ChallengeCategory challengeCategory
             , Pageable pageable
     ) {
         Slice<Challenge> challengeList = challengeRepository.findAllByChallengeCategoryAndEndDateGreaterThanEqual(
-                ChallengeCategory.convertStringToChallengeCategory(challengeCategory), LocalDate.now(), pageable
+                challengeCategory, LocalDate.now(), pageable
         );
         return challengeList.map(ChallengeSummaryInfo::fromEntity);
     }
@@ -68,10 +68,7 @@ public class ChallengeService {
         return challengeRepository.save(Challenge.builder()
                 .registeredMember(member)
                 .challengeName(request.getChallengeName())
-                .challengeCategory(ChallengeCategory
-                        .convertStringToChallengeCategory(
-                                request.getChallengeCategory())
-                )
+                .challengeCategory(request.getChallengeCategory())
                 .summary(request.getSummary())
                 .contents(request.getContents())
                 .startDate(request.getStartDate())
