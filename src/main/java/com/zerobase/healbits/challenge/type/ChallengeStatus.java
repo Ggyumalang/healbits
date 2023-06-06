@@ -1,4 +1,4 @@
-package com.zerobase.healbits.common.type;
+package com.zerobase.healbits.challenge.type;
 
 public enum ChallengeStatus {
     READY,

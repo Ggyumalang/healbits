@@ -1,8 +1,8 @@
 package com.zerobase.healbits.transaction.dto;
 
 import com.zerobase.healbits.transaction.domain.Transaction;
-import com.zerobase.healbits.common.type.TransactionResultType;
-import com.zerobase.healbits.common.type.TransactionType;
+import com.zerobase.healbits.transaction.type.TransactionResultType;
+import com.zerobase.healbits.transaction.type.TransactionType;
 import lombok.*;
 
 import java.time.LocalDateTime;

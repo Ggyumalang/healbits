@@ -4,7 +4,7 @@ import com.zerobase.healbits.challenge.dto.ChallengeDetailInfo;
 import com.zerobase.healbits.challenge.dto.ChallengeSummaryInfo;
 import com.zerobase.healbits.challenge.dto.RegisterChallenge;
 import com.zerobase.healbits.challenge.service.ChallengeService;
-import com.zerobase.healbits.common.type.ChallengeCategory;
+import com.zerobase.healbits.challenge.type.ChallengeCategory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;

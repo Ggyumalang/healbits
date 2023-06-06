@@ -5,6 +5,8 @@ import static com.querydsl.core.types.PathMetadataFactory.*;
 import com.querydsl.core.types.dsl.*;
 
 import com.querydsl.core.types.PathMetadata;
+import com.zerobase.healbits.transaction.type.TransactionResultType;
+import com.zerobase.healbits.transaction.type.TransactionType;
 import javax.annotation.Generated;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.PathInits;
@@ -39,9 +41,9 @@ public class QTransaction extends EntityPathBase<Transaction> {
 
     public final StringPath transactionId = createString("transactionId");
 
-    public final EnumPath<com.zerobase.healbits.common.type.TransactionResultType> transactionResultType = createEnum("transactionResultType", com.zerobase.healbits.common.type.TransactionResultType.class);
+    public final EnumPath<TransactionResultType> transactionResultType = createEnum("transactionResultType", TransactionResultType.class);
 
-    public final EnumPath<com.zerobase.healbits.common.type.TransactionType> transactionType = createEnum("transactionType", com.zerobase.healbits.common.type.TransactionType.class);
+    public final EnumPath<TransactionType> transactionType = createEnum("transactionType", TransactionType.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedDateTime = _super.updatedDateTime;

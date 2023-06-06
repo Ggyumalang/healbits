@@ -7,7 +7,7 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.zerobase.healbits.common.exception.HealBitsException;
-import com.zerobase.healbits.common.type.ChallengeCategory;
+import com.zerobase.healbits.challenge.type.ChallengeCategory;
 import com.zerobase.healbits.common.util.FileUtil;
 import java.io.IOException;
 import java.io.InputStream;

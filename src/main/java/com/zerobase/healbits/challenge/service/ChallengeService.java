@@ -8,7 +8,7 @@ import com.zerobase.healbits.challenge.dto.RegisterChallenge;
 import com.zerobase.healbits.common.exception.HealBitsException;
 import com.zerobase.healbits.challenge.repository.ChallengeRepository;
 import com.zerobase.healbits.member.repository.MemberRepository;
-import com.zerobase.healbits.common.type.ChallengeCategory;
+import com.zerobase.healbits.challenge.type.ChallengeCategory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;

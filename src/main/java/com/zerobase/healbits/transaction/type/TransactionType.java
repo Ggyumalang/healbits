@@ -1,4 +1,4 @@
-package com.zerobase.healbits.common.type;
+package com.zerobase.healbits.transaction.type;
 
 public enum TransactionType {
     CHARGE, USE , PAYBACK

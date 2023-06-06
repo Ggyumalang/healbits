@@ -1,6 +1,6 @@
 package com.zerobase.healbits.takechallenge.controller;
 
-import com.zerobase.healbits.common.type.ChallengeStatus;
+import com.zerobase.healbits.challenge.type.ChallengeStatus;
 import com.zerobase.healbits.takechallenge.dto.CompleteTookChallenge;
 import com.zerobase.healbits.takechallenge.dto.ParticipateChallenge;
 import com.zerobase.healbits.takechallenge.dto.TakeChallengeInfo;

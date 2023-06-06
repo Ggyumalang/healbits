@@ -2,8 +2,8 @@ package com.zerobase.healbits.transaction.domain;
 
 import com.zerobase.healbits.common.domain.BaseEntity;
 import com.zerobase.healbits.member.domain.Member;
-import com.zerobase.healbits.common.type.TransactionResultType;
-import com.zerobase.healbits.common.type.TransactionType;
+import com.zerobase.healbits.transaction.type.TransactionResultType;
+import com.zerobase.healbits.transaction.type.TransactionType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

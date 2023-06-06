@@ -1,4 +1,4 @@
-package com.zerobase.healbits.common.type;
+package com.zerobase.healbits.takechallenge.type;
 
 public class PaybackPercentagePolicy {
     public static final int PERFECT = 100;

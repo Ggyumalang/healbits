@@ -2,7 +2,7 @@ package com.zerobase.healbits.common.util;
 
 import com.zerobase.healbits.common.exception.HealBitsException;
 import com.zerobase.healbits.common.type.ErrorCode;
-import com.zerobase.healbits.common.type.ChallengeCategory;
+import com.zerobase.healbits.challenge.type.ChallengeCategory;
 import lombok.experimental.UtilityClass;
 
 import java.time.LocalDate;

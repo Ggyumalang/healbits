@@ -7,7 +7,7 @@ import com.zerobase.healbits.common.exception.HealBitsException;
 import com.zerobase.healbits.member.domain.Member;
 import com.zerobase.healbits.takechallenge.domain.TakeChallenge;
 import com.zerobase.healbits.takechallenge.repository.TakeChallengeRepository;
-import com.zerobase.healbits.common.type.ChallengeCategory;
+import com.zerobase.healbits.challenge.type.ChallengeCategory;
 import com.zerobase.healbits.verification.domain.Verification;
 import com.zerobase.healbits.verification.dto.VerificationDto;
 import com.zerobase.healbits.verification.dto.VerificationInfo;

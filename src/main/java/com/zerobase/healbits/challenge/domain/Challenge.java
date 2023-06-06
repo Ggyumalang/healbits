@@ -2,7 +2,7 @@ package com.zerobase.healbits.challenge.domain;
 
 import com.zerobase.healbits.common.domain.BaseEntity;
 import com.zerobase.healbits.member.domain.Member;
-import com.zerobase.healbits.common.type.ChallengeCategory;
+import com.zerobase.healbits.challenge.type.ChallengeCategory;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
